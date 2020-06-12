@@ -1,0 +1,38 @@
+version: "3.8"
+
+# note: make sure to locally configure dns to redirect masterkenth-test.com to localhost
+services: 
+  reverse-proxy:
+    image: traefik:v2.2
+    command: 
+      - --api
+      # providers
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.file.filename=/traefik-dynamic-dev.yml
+      # entrypoints
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secure.address=:443
+    ports:
+      - "8080:8080" # traefik dashboard
+      - "80:80"     # for https redirects and ACME challenge
+      - "443:443"   # standard https
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik-dynamic-dev.yml:/traefik-dynamic-dev.yml
+      # dev version uses local self-signed certificates
+      - ./tls-dev.crt:/tls-dev.crt
+      - ./tls-dev.key:/tls-dev.key
+    labels:
+      - "traefik.enable=true"
+      # dashboard
+      - "traefik.http.routers.traefik.rule=Host(`traefik.masterkenth-test.com`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.entrypoints=web-secure"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=oof:$$2y$$05$$GZdcgg/bGANTMtSMl8fxDODoz31MtEr2ZGh32M4rUtTlGBAhu.S8m"
+      # redirect all http to https
+      - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.redirs.entrypoints=web"
+      - "traefik.http.routers.redirs.middlewares=redirect-https@file"
