@@ -1,0 +1,15 @@
+{
+  "name": "webserver",
+  "version": "1.0.0",
+  "description": "Main web server part of my personal site project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Master Kenth",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-subdomain": "^1.0.5"
+  }
+}
