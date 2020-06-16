@@ -1,8 +1,10 @@
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const graphql = require('graphql');
+const cors = require('cors');
 
 const router = express.Router();
+router.use(cors());
 
 function registerGraphQLHandler(dbName, gqlSchemaContents, dbQueryRoot) {
   const apiEndpoint = `/${dbName}/graphql`;
