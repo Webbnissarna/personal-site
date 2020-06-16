@@ -3,15 +3,16 @@ const subdomain = require('express-subdomain');
 const path = require('path');
 const fs = require('fs');
 const fsp = fs.promises;
+const db = require('./db');
 
-// Holds the list of subdomains with valid site handlers
-let validSubdomains = [];
+// Holds the map of subdomains with valid site handlers
+let subdomainHandlers = [];
 
 const app = express();
 app.set('json spaces', 2);
 
 app.use((req, res, next) => {
-  if(req.subdomains.length > 0 && !validSubdomains.includes(req.subdomains[0])) {
+  if(req.subdomains.length > 0 && subdomainHandlers[req.subdomains[0]] === undefined) {
     // Redirect invalid subdomains (no site handler) to home page
     const hostWithoutSubdomains = req.hostname.split('.').slice(req.subdomains.length).join('.');
     const newUrl = `${req.protocol}://${hostWithoutSubdomains}`;
@@ -55,12 +56,31 @@ fsp.readdir(siteRootDir).then(async (paths) => {
   siteHandlers.forEach(handlerObj => {
     if(handlerObj.handler.subdomainName == null) {
       app.use('/', handlerObj.handler.router);
+      subdomainHandlers['www'] = handlerObj.handler;
     } else {
       app.use(subdomain(handlerObj.handler.subdomainName, handlerObj.handler.router));
-      validSubdomains.push(handlerObj.handler.subdomainName);
+      subdomainHandlers[handlerObj.handler.subdomainName] = handlerObj.handler;
     }
     console.log(`loaded site handler '${handlerObj.handler.subdomainName || '(home)'}' (${handlerObj.path})`);
   });    
+}).then(() => {
+  // Register api endpoints
+  const apiHandler = subdomainHandlers['api'];
+  if(apiHandler !== undefined) {
+    for(let [handlerName, handler] of Object.entries(subdomainHandlers)) {
+      if(Object.prototype.hasOwnProperty.call(handler, 'api')) {
+        handler.api.getGQLSchemaContents().then((gqlSchemaContents) => {
+          return handler.api.getDBQueryRoot(db).then((dbQueryRoot) => {
+            apiHandler.registerGraphQLHandler(handler.api.dbName, gqlSchemaContents, dbQueryRoot);
+          });
+        }).catch((e) => {
+          console.error(`unable to get gql schema for ${handlerName} (${e})`);
+        });
+      }
+    }
+  } else {
+    console.error('found no api handler');
+  }
 }).catch((e) => {
   console.error(`error reading sites (${e})`);
 }).finally(() => {
