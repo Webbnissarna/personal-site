@@ -52,5 +52,18 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
     volumes:
       - mongodata:/data/db
+  webserver:
+    build: ./webserver
+    command: "node index.js"
+    volumes: 
+      - ./webserver/sites/:/usr/app/sites/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.main.rule=hostregexp(`{subdomain:.*}masterkenth-test.com`)"
+      - "traefik.http.routers.main.priority=-1"
+      - "traefik.http.routers.main.entrypoints=web-secure"
+      - "traefik.http.routers.main.tls=true"
+      - "traefik.http.routers.main.tls.domains[0].main=masterkenth-test.com"
+      - "traefik.http.routers.main.tls.domains[0].sans=*.masterkenth-test.com"
 volumes:
   mongodata:
