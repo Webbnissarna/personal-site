@@ -5,7 +5,7 @@ let connectionPool = [];
 async function getConnection(dbName) {
   let con = connectionPool[dbName];
   if(con === undefined) {
-    con = await mongo.createConnection(`mongodb://root:password@localhost:27017/${dbName}?authSource=admin`, {
+    con = await mongo.createConnection(`mongodb://root:password@mongo:27017/${dbName}?authSource=admin`, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
