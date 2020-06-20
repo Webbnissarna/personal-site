@@ -9,7 +9,7 @@ import './App.css';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: "http://api.masterkenth-test.com/test/graphql"
+  uri: "https://api.masterkenth-test.com/test/graphql"
 });
 
 const client = new ApolloClient({
