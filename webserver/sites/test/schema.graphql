@@ -1,0 +1,18 @@
+type Query {
+    people: [Person]
+    websites: [Website]
+}
+
+type Person {
+    name: String
+    birthdate: String
+    bald: Boolean
+    net_worth: Float
+    tags: [String]
+}
+
+type Website {
+    name: String
+    desc: String
+    score: Int
+}

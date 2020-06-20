@@ -1,0 +1,2 @@
+[{"_id":{"$oid":"5ee8cf808f8cbe000722b1c8"},"name":"Bill Gates","birthdate":{"$date":"1955-10-28T00:00:00.000Z"},"bald":false,"net_worth":108.3,"tags":["rich","philanthropist"]},
+{"_id":{"$oid":"5ee8d0118f8cbe000722b1ca"},"name":"Jeff Bezos","birthdate":{"$date":"1964-01-12T00:00:00.000Z"},"bald":true,"net_worth":152.9,"tags":["rich","controversial"]}]

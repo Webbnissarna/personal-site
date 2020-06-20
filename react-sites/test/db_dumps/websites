@@ -1,0 +1,4 @@
+[{"_id":{"$oid":"5ee8d0b08f8cbe000722b1cc"},"name":"Google","desc":"Popular search engine","score":4},
+{"_id":{"$oid":"5ee8d0c18f8cbe000722b1ce"},"name":"YouTube","desc":"Video site","score":4},
+{"_id":{"$oid":"5ee8d1078f8cbe000722b1d0"},"name":"StackOverflow","desc":"Essential programming tool","score":5},
+{"_id":{"$oid":"5ee8d1848f8cbe000722b1d2"},"name":"Facebook","desc":"Virtual prison experience","score":1}]
