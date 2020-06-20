@@ -106,3 +106,4 @@ dist
 *.crt
 *.key
 react-sites/*/build
+webserver/sites/*/static
