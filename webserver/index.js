@@ -8,6 +8,39 @@ const db = require('./db');
 // Holds the map of subdomains with valid site handlers
 let subdomainHandlers = [];
 
+
+function runInitialDBConnections () {
+  // Register api endpoints
+  const apiHandler = subdomainHandlers['api'];
+  if(apiHandler !== undefined) {
+    console.log('Running initial DB connections');
+    let promises = [];
+    for(let [, handler] of Object.entries(subdomainHandlers)) {
+      if(Object.prototype.hasOwnProperty.call(handler, 'api')) {
+        promises.push(handler.api.getGQLSchemaContents().then((gqlSchemaContents) => {
+          return handler.api.getDBQueryRoot(db).then((dbQueryRoot) => {
+            apiHandler.registerGraphQLHandler(handler.api.dbName, gqlSchemaContents, dbQueryRoot);
+          });
+        }));
+      }
+    }
+
+    return Promise.all(promises)
+      .then(() => {
+        console.log('Initial DB setup done');
+      })
+      .catch((e) => {
+        const reconnectDelay = 2000;
+        console.error(`initial db error: ${e}`);
+        console.error(`retrying db connection in ${reconnectDelay/1000}s`);
+        setTimeout(runInitialDBConnections, reconnectDelay);
+      });
+  } else {
+    console.error('found no api handler');
+    return Promise.resolve();
+  }
+}
+
 const app = express();
 app.set('json spaces', 2);
 
@@ -63,26 +96,9 @@ fsp.readdir(siteRootDir).then(async (paths) => {
     }
     console.log(`loaded site handler '${handlerObj.handler.subdomainName || '(home)'}' (${handlerObj.path})`);
   });    
-}).then(() => {
-  // Register api endpoints
-  const apiHandler = subdomainHandlers['api'];
-  if(apiHandler !== undefined) {
-    for(let [handlerName, handler] of Object.entries(subdomainHandlers)) {
-      if(Object.prototype.hasOwnProperty.call(handler, 'api')) {
-        handler.api.getGQLSchemaContents().then((gqlSchemaContents) => {
-          return handler.api.getDBQueryRoot(db).then((dbQueryRoot) => {
-            apiHandler.registerGraphQLHandler(handler.api.dbName, gqlSchemaContents, dbQueryRoot);
-          });
-        }).catch((e) => {
-          console.error(`unable to get gql schema for ${handlerName} (${e})`);
-        });
-      }
-    }
-  } else {
-    console.error('found no api handler');
-  }
-}).catch((e) => {
-  console.error(`error reading sites (${e})`);
-}).finally(() => {
-  app.listen(80, () => { console.log('Server up'); });
-});
+}).then(() =>  runInitialDBConnections()) // Registers API endpoints
+  .catch((e) => {
+    console.error(`error reading sites (${e})`);
+  }).finally(() => {
+    app.listen(80, () => { console.log('Server up'); });
+  });
