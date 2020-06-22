@@ -43,6 +43,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password # note that having this in plaintext doesn't matter too much as mongo should not be publically exposed through firewall (TODO: change to .env file)
     ports:
       - "27017:27017"
+    volumes:
+      - mongodata:/data/db
   mongo-express:
     image: mongo-express
     ports:
@@ -50,8 +52,6 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
-    volumes:
-      - mongodata:/data/db
   webserver:
     build: ./webserver
     command: "node index.js"
