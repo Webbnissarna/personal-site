@@ -18,15 +18,21 @@ export default function Notes () {
 
   return <div>
     <h1>Notes</h1>
-    { !!error && <span>Error: {`${error}`}</span> }
-    { loading ? (<span>Loading...</span>) : (
-      data.notes.map((note, index) => (
-        <div key={`note_${index}`}>
-          <NavLink to={`/notes/${note._id}`}>{note.title}</NavLink> -
-          <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
-        </div>
-      ))
-    ) }
+    {
+      (!!error || !data) && !loading ? (
+        error
+          ? (<span>{error.message}</span>)
+          : (<span>Unknown error fetching data</span>)
+      ) : (
+        loading ? (<span>Loading...</span>)
+          : (data.notes.map((note, index) => (
+            <div key={`note_${index}`}>
+              <NavLink to={`/notes/${note._id}`}>{note.title}</NavLink> -
+              <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
+            </div>
+          )))
+      )
+    }
   </div>
 }
 

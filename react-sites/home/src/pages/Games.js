@@ -18,14 +18,20 @@ export default function Games () {
 
   return <div>
     <h1>Games</h1>
-    { !!error && <span>Error: {`${error}`}</span> }
-    { loading ? (<span>Loading...</span>) : (
-      data.games.map((game, index) => (
-        <div key={`game_${index}`}>
-          <NavLink to={`/games/${game._id}`}>{game.title}</NavLink> - <span>{game.desc}</span>
-        </div>
-      ))
-    ) }
+    {
+      (!!error || !data) && !loading ? (
+        error
+          ? (<span>{error.message}</span>)
+          : (<span>Unknown error fetching data</span>)
+      ) : (
+        loading ? (<span>Loading...</span>)
+          : (data.games.map((game, index) => (
+            <div key={`game_${index}`}>
+              <NavLink to={`/games/${game._id}`}>{game.title}</NavLink> - <span>{game.desc}</span>
+            </div>
+          )))
+      )
+    }
   </div>
 }
 
