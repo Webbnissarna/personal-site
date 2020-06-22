@@ -1,0 +1,96 @@
+version: "3.8"
+
+services:
+  reverse-proxy:
+    image: traefik:v2.2
+    command:
+      - --api
+      # providers
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.file.filename=/traefik-dynamic.yml
+      # entrypoints
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secure.address=:443
+      - --entrypoints.web-mongoe.address=:8081
+      # TLS setup
+      - --certificatesResolvers.le.acme.dnsChallenge.provider=digitalocean
+      - --certificatesResolvers.le.acme.dnsChallenge.delayBeforeCheck=0
+      - --certificatesResolvers.le.acme.email=${MK_LE_EMAIL}
+      - --certificatesResolvers.le.acme.storage=acme.json
+      # uncomment to use LE staging server
+      # - --certificatesResolvers.le.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+    environment:
+      - DO_AUTH_TOKEN_FILE=/DO_AUTH_TOKEN
+    ports:
+      # for https redirects and ACME challenge
+      - "80:80"
+      # standard https
+      - "443:443"
+      # mongo-express (NOTE: limit access in firewall!)
+      - "8081:8081"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik-dynamic.yml:/traefik-dynamic.yml
+      # used by LE (https://docs.traefik.io/https/acme/#dnschallenge)
+      # setup token in DO dashboard under API
+      - ./DO_AUTH_TOKEN:/DO_AUTH_TOKEN
+      # required for LE, make sure to touch, chmod 600 and chown+chgrp root this file beforehand
+      - ./acme.json:/acme.json
+    labels:
+      - "traefik.enable=true"
+      # dashboard
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${MK_MAIN_DOMAIN}`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.entrypoints=web-secure"
+      - "traefik.http.routers.traefik.priority=1"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=le"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=${MK_BASICAUTH_STRING}"
+      # redirect all http to https
+      - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.redirs.entrypoints=web"
+      - "traefik.http.routers.redirs.middlewares=redirect-https@file"
+  mongo:
+    image: mongo:4.2
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MK_MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MK_MONGO_PASS}
+    volumes:
+      # enable persistent data storage
+      - mongodata:/data/db
+  mongo-express:
+    image: mongo-express
+    environment:
+      # user/pass of mongo instance
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MK_MONGO_USER}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MK_MONGO_PASS}
+      - ME_CONFIG_OPTIONS_EDITORTHEME=ambiance
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mongoe.rule=Host(`${MK_MAIN_DOMAIN}`)"
+      - "traefik.http.routers.mongoe.entrypoints=web-mongoe"
+      - "traefik.http.routers.mongoe.tls=true"
+      - "traefik.http.routers.mongoe.tls.certresolver=le"
+      # lock access behind basic auth since it's otherwise unsecured
+      - "traefik.http.routers.mongoe.middlewares=auth"
+  webserver:
+    build: ./webserver
+    # todo: replace with an auto-reloader (pm2/nodemon) to allow sites to be fully build/reloaded at runtime
+    command: "node index.js"
+    volumes: 
+      # linking these allows sites to be updated without restarting service (note: currently only static content)
+      - ./webserver/sites/:/usr/app/sites/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.main.rule=hostregexp(`{subdomain:.*}${MK_MAIN_DOMAIN}`)"
+      # lower priority to ensure specific subdomains (like traefik) takes precedence
+      - "traefik.http.routers.main.priority=-1"
+      - "traefik.http.routers.main.entrypoints=web-secure"
+      - "traefik.http.routers.main.tls=true"
+      - "traefik.http.routers.main.tls.certresolver=le"
+      - "traefik.http.routers.main.tls.domains[0].main=${MK_MAIN_DOMAIN}"
+      - "traefik.http.routers.main.tls.domains[0].sans=*.${MK_MAIN_DOMAIN}"
+volumes:
+  mongodata:
