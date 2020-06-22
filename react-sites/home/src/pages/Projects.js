@@ -15,7 +15,7 @@ export default function Projects () {
   `)
 
   return <div>
-    <h1>Games</h1>
+    <h1>Projects</h1>
     {
       (!!error || !data) && !loading ? (
         error
