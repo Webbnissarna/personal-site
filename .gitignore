@@ -107,3 +107,5 @@ dist
 *.key
 react-sites/*/build
 webserver/sites/*/static
+DO_AUTH_TOKEN
+acme.json
