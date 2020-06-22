@@ -30,7 +30,7 @@ To run in production, a few extra files not included in the repo are needed (all
     | MK_MONGO_PASS       | Default MongoDB password.                                                                                                                                                                                                                                                                                            |
     | MK_BASICAUTH_STRING | Auth string as used for [Traefik Basic Auth](https://docs.traefik.io/middlewares/basicauth/) used to access Traefik dashboard and mongo-express. Note that the string used in the .env file should not be escaped, so the correct command to generate it is `echo $(htpasswd -nbB <USER> "<PASS>")` (without `sed`). |
 
-From root then run `sudo docker-compose up` and the site should be live.
+From root then run `sudo docker-compose up` and the site should be live (make sure to build `react-sites` as well (see [below](#react-sites)) otherwise no actual content is available).
 
 ### Dev
 From root run `docker-compose -f ./docker-compose-dev.yml up`.
@@ -68,7 +68,7 @@ All properties of the `exports.api` object are required.
 | getDBQueryRoot       | (`Object`) rootValue as passed to [express-graphql](https://github.com/graphql/express-graphql).   |
 
 ### API
-The `api` subdomain is a special site that acts as a REST-like GraphQL backend, with the url format `api.[domain].[tld]/[subdomain]/graphql?query=[query]`.
+The `api` subdomain is a special site that acts as a REST-like GraphQL backend, with the url format `api.[domain].[tld]/[db]/graphql?query=[query]` (e.g. [api.masterkenth.com/test/graphql?query={people{name}](https://api.masterkenth.com/test/graphql?query={people{name}})).
 
 Each site defines their own API feature set which gets registered on startup.
 
@@ -80,3 +80,10 @@ the results into `webserver/sites/*/static`. From there on, any new site added j
 
 ### Using API
 For an example of how to query GraphQL from React, see `react-sites/test/App.js` for an example using [Apollo Client](https://www.apollographql.com/docs/tutorial/client/).
+
+## Debugging notes
+- The Traefik dashboard shows live entrypoints, routers, services etc. If you expect a service to be there but isn't, it's probably dead (check docker logs).
+- If Traefik is unable to find a path for a given route, it will respond with "404 page not found".
+- However, if Express is unable to find a path for a given route, it will respond with "Cannot GET /some/invalid/path".
+  - Use this to figure out where in the chain a given route/path/url fails.
+- Some changes to `docker-compose.yml` are not correctly reflected unless you perform a `docker-compose down` before `docker-compose up` ([cleanAndRunDocker.sh](scripts/cleanAndRunDocker.sh) should force a clean `up` and is useful for experimenting with config changes).
