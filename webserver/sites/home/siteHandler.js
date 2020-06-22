@@ -4,6 +4,10 @@ const fsp = require('fs').promises;
 
 const router = express.Router();
 router.use('/', express.static(path.join(__dirname, 'static')));
+router.get('*', (req,res) => {
+  // Fallback to serve index when no exact match is found (this is required for React Router to function)
+  res.sendFile(path.join(__dirname, 'static/index.html'));
+});
 
 exports.subdomainName = null;
 exports.router = router;
