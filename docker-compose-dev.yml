@@ -14,7 +14,6 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.web-secure.address=:443
     ports:
-      - "8080:8080" # traefik dashboard
       - "80:80"     # for https redirects and ACME challenge
       - "443:443"   # standard https
     volumes:
