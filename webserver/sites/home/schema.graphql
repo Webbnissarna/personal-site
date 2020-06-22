@@ -1,0 +1,33 @@
+type Query {
+    games: [Game]
+    game(_id: ID!): Game
+    projects: [Project]
+    project(_id: ID!): Project
+    notes: [Note]
+    note(_id: ID!): Note
+}
+
+type Game {
+    _id: ID!
+    highlight: Boolean
+    title: String
+    desc: String
+    release_date: String
+    tags: [String]
+    body: String
+}
+
+type Project {
+    _id: ID!
+    title: String
+    desc: String
+    subdomain: String
+}
+
+type Note {
+    _id: ID!
+    title: String
+    desc: String
+    post_date: String
+    body: String
+}
