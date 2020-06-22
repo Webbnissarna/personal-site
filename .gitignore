@@ -109,3 +109,4 @@ react-sites/*/build
 webserver/sites/*/static
 DO_AUTH_TOKEN
 acme.json
+LocalNotes.md
