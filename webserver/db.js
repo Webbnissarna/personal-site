@@ -1,11 +1,13 @@
 const mongo = require('mongoose');
+const { createModel } = require('mongoose-gridfs');
 
 let connectionPool = [];
+let fileModel = null;
 
 async function getConnection(dbName) {
   let con = connectionPool[dbName];
   if(con === undefined) {
-    con = await mongo.createConnection(`mongodb://root:password@mongo:27017/${dbName}?authSource=admin`, {
+    con = await mongo.createConnection(`mongodb://root:password@masterkenth-test.com:27017/${dbName}?authSource=admin`, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -23,5 +25,20 @@ function registerSchemaAndGetModel(dbCon, modelName, schemaObj) {
   return model;
 }
 
+async function registerFileModel() {
+  const con = await getConnection('files');
+  fileModel = createModel({
+    modelName: 'File',
+    connection: con
+  });
+  console.log('mongo registered file handler');
+}
+
+function getFileModel() {
+  return fileModel;
+}
+
 exports.getConnection = getConnection;
 exports.registerSchemaAndGetModel = registerSchemaAndGetModel;
+exports.registerFileModel = registerFileModel;
+exports.getFileModel = getFileModel;
