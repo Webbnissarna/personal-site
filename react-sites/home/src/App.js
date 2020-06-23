@@ -16,7 +16,7 @@ import About from './pages/About'
 
 const cache = new InMemoryCache()
 const link = new HttpLink({
-  uri: 'http://api.masterkenth-test.com/main/graphql'
+  uri: `${window.location.protocol}//api.${window.location.hostname}/main/graphql`
 })
 
 const client = new ApolloClient({
