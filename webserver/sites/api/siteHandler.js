@@ -16,6 +16,15 @@ function registerGraphQLHandler(dbName, gqlSchemaContents, dbQueryRoot) {
   console.log(`(api) registered gql ${apiEndpoint}`);
 }
 
+function registerFallbackHandler() {
+  router.use('/', (req, res) => {
+    const hostWithoutSubdomains = req.hostname.split('.').slice(req.subdomains.length).join('.');
+    const newUrl = `${req.protocol}://${hostWithoutSubdomains}`;
+    res.redirect(newUrl);
+  });
+}
+
 exports.subdomainName = 'api';
 exports.router = router;
 exports.registerGraphQLHandler = registerGraphQLHandler;
+exports.registerFallbackHandler = registerFallbackHandler;

@@ -28,6 +28,7 @@ function runInitialDBConnections () {
     return Promise.all(promises)
       .then(() => {
         console.log('Initial DB setup done');
+        apiHandler.registerFallbackHandler();
       })
       .catch((e) => {
         const reconnectDelay = 2000;
