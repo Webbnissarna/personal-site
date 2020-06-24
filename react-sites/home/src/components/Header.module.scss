@@ -1,0 +1,64 @@
+@import '../Common.scss';
+
+$root-rotation: 25deg;
+$span-spacing: 10px;
+$span-padding-vertical: 5px;
+$span-padding-horizontal: 5vw;
+$span-bg-width: 200vw;
+$span-align-left: -#{$span-padding-horizontal};
+$span-align-right: calc(100% - #{$span-bg-width} + #{$span-padding-horizontal});
+$span-bg-skew: 30deg;
+$span-font: 'Raleway', sans-serif;
+$span-font-size: 12vh;
+$span-font-size-portrait: 14vw;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotateZ(#{$root-rotation});
+  min-width: 60vw;
+  min-height: 45vh;
+
+  span {
+    font-size: $span-font-size;
+    position: relative;
+    z-index: 0;
+    font-family: $span-font;
+    line-height: 1em;
+
+    &:before {
+      background-color: #FFF;
+      content: "";
+      position: absolute;
+      padding: $span-padding-vertical 0px;
+      top: -#{$span-padding-vertical};
+      width: $span-bg-width;
+      height: 100%;
+      z-index: -1;
+    }
+  }
+
+  span:nth-child(1) {
+    margin-bottom: calc(#{$span-padding-vertical} + #{$span-spacing/2});
+    &:before {
+      left: $span-align-right;
+      transform: skewX(#{$span-bg-skew});
+    }
+  }
+
+  span:nth-child(2) {
+    margin-top: calc(#{$span-padding-vertical} + #{$span-spacing/2});
+    &:before {
+      left: $span-align-left;
+      transform: skewX(-#{$span-bg-skew});
+    }
+  }
+}
+
+@media (#{$portrait-query}) {
+  .root span {
+    font-size: $span-font-size-portrait;
+  }
+}

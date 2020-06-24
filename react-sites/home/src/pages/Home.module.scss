@@ -1,0 +1,55 @@
+  @import '../Common.scss';
+
+  .root {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+    overflow: hidden;
+
+    .menu {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+
+      ul {
+        list-style: outside none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          margin: 4px 0px;
+          font-size: 2em;
+          font-weight: 100;
+
+          a {
+            color: white;
+            text-decoration: none;
+            display: block;
+
+            padding: 5px 3vw 5px 10vw;
+            opacity: 0.8;
+            
+            &:hover {
+              opacity: 1.0;
+              background-color: rgba(255, 255, 255, 0.2);
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  @media (#{$portrait-query}) {
+    .root {
+      flex-direction: column;
+
+      .menu ul li a {
+        width: 100vw;
+        text-align: center;
+        padding: 5px 0;
+      }
+    }
+  }

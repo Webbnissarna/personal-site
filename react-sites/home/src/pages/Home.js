@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Header from '../components/Header'
 import LinkList from '../components/LinkList'
+import Styles from './Home.module.scss'
 
 export default function Home () {
   const mainLinks = [
@@ -13,9 +14,11 @@ export default function Home () {
   ]
 
   return (
-    <div>
+    <div className={Styles.root}>
       <Header />
-      <LinkList links={mainLinks} />
+      <div className={Styles.menu}>
+        <LinkList links={mainLinks} />
+      </div>
     </div>
   )
 }

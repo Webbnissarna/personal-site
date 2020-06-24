@@ -1,7 +1,9 @@
-import React from 'react';
+import React from 'react'
+import Styles from './Header.module.scss'
 
-export default function Header(props) {
-  return <div>
-    <h2>Header here</h2>
-  </div>;
+export default function Header (props) {
+  return <div className={Styles.root}>
+    <span>MASTER</span>
+    <span>KENTH</span>
+  </div>
 }
