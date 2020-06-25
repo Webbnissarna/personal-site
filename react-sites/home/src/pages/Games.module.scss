@@ -1,0 +1,81 @@
+@import '../Common.scss';
+
+$card-margin-vertical: 50px;
+$card-min-width: 80vw;
+$card-padding: 20px;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .rootCard {
+    margin: $card-margin-vertical 0;
+    width: calc(#{$card-min-width} - #{$card-padding*2});
+    padding: $card-padding;
+    background-color: rgba(255, 255, 255, 0.9);
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      h1 {
+        margin: 0;
+      }
+    }
+
+    .listContainer {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      a {
+        display: contents;
+      }
+
+      .listCard {
+        margin: 5px;
+        width: 450px;
+        height: 250px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-end;
+        background-size: cover;
+        background-position: center center;
+        
+        
+        .content {
+          background-color: rgba(0, 0, 0, 0.5);
+          text-align: center;
+          padding: 10px;
+          font-size: 0.9em;
+          flex-basis: 35%;
+          
+          h2 {
+            margin: 0 0 10px 0;
+          }
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (#{$portrait-query}) {
+  .root .rootCard {
+    .listContainer {
+      justify-content: stretch;
+  
+      .listCard {
+        width: auto;
+        flex-grow: 1;
+      }
+    }
+  }
+}
