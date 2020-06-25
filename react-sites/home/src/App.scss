@@ -7,6 +7,16 @@ html, body {
   font-family: $font-regular;
 }
 
+a {
+  $color: #0099ff;
+  color: $color;
+  text-decoration: none;
+
+  &:hover {
+    color: lighten($color: $color, $amount: 30)
+  }
+}
+
 #root {
   min-height: 100vh;
   min-width: 100vw;
