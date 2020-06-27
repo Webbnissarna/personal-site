@@ -1,0 +1,27 @@
+@import './SassCommon.scss';
+
+$card-margin-vertical: 50px;
+$card-min-width: 80vw;
+$card-padding: 20px;
+
+.pageRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .rootCard {
+    margin: $card-margin-vertical 0;
+    width: calc(#{$card-min-width} - #{$card-padding*2});
+    padding: $card-padding;
+    background-color: rgba(255, 255, 255, 0.9);
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      h1 {
+        margin: 0;
+      }
+    }
+  }
+}

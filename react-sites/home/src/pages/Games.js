@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import Styles from './Games.module.scss'
+import SharedStyles from '../Shared.module.scss'
 
 export default function Games () {
   const { data, loading, error } = useQuery(gql`
@@ -18,12 +19,12 @@ export default function Games () {
   `)
 
   return (
-    <div className={Styles.root}>
-      <div className={Styles.rootCard}>
+    <div className={SharedStyles.pageRoot}>
+      <div className={SharedStyles.rootCard}>
         <div>
           <NavLink to={'/'}>⮜ Home</NavLink>
         </div>
-        <div className={Styles.header}>
+        <div className={SharedStyles.header}>
           <h1>Games</h1>
           <span>A list of game projects I&apos;m working on or have worked on in the past</span>
         </div>
