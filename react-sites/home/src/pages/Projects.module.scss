@@ -1,0 +1,56 @@
+@import '../SassCommon.scss';
+
+$card-height: 120px;
+$card-padding: 30px;
+$card-margin-vertical: 40px;
+$card-image-margin: 40px;
+
+.listContainer {
+  padding: 0 40px;
+  a {
+    &:hover {
+      .listCard {
+        .content {
+          color: lighten($color: #000000, $amount: 50);
+        }
+      }
+    }
+
+    &:active {
+      .listCard {
+        .content {
+          color: lighten($color: #000000, $amount: 80);
+        }
+      }
+    }
+
+    .listCard {
+      height: $card-height;
+      padding: $card-padding;
+      display: flex;
+      margin: $card-margin-vertical 0;
+      
+      border-radius: 50px;
+      background: #ffffff;
+      box-shadow:  15px 15px 30px #d9d9d9, 
+                   -15px -15px 30px #ffffff;
+      img {
+        width: $card-height;
+        height: $card-height;
+        margin-right: $card-image-margin;
+      }
+      .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        color: #000;
+  
+        h2, p {
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
+  }
+}
