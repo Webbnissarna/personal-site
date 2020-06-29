@@ -27,6 +27,7 @@ type Project {
 type Note {
     _id: ID!
     title: String
+    img_key: String
     desc: String
     post_date: String
     body: String

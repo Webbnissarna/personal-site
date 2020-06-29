@@ -37,6 +37,7 @@ exports.api = {
       db.registerSchemaAndGetModel(con, 'Note', {
         _id: String,
         title: String,
+        img_key: String,
         desc: String,
         post_date: Date,
         body: String
