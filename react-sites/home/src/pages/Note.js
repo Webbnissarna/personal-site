@@ -35,9 +35,9 @@ export default function Note () {
             loading ? (<span>Loading...</span>)
               : (<>
                 <div className={SharedStyles.header}>
-                  { data.note.img_key && <img className={Styles.headerImage} alt="" src={Util.getStaticContentUrl(data.note.img_key)} /> }
+                  { data.note.img_key && <img className={SharedStyles.headerImage} alt="" src={Util.getStaticContentUrl(data.note.img_key)} /> }
                   <h1>{data.note.title}</h1>
-                  <span className={Styles.subtitle}>{Util.formatDateNumber(data.note.post_date)}</span>
+                  <span className={SharedStyles.subtitle}>{Util.formatDateNumber(data.note.post_date)}</span>
                 </div>
                 <div>
                   <ReactMarkdown source={data.note.body} />
