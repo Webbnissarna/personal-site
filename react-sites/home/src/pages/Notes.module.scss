@@ -1,0 +1,42 @@
+@import '../SassCommon.scss';
+
+.listContainer {
+  .listCard {
+    background-color: #efefef;
+    box-shadow: rgba(0, 0, 0, 0.2) 3px 3px 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+    overflow: hidden;
+    
+    .content {
+      display: flex;
+      flex-direction: row;
+      
+      &:hover .innerContent {
+        color: lighten($color: #000000, $amount: 50);
+      }
+
+      &:active .innerContent {
+        color: lighten($color: #000000, $amount: 80);
+      }
+
+      img {
+        max-width: 10vw;
+      }
+
+      .innerContent {
+        padding: 5px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #000000;
+  
+
+  
+        h2 {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
