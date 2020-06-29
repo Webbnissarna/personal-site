@@ -1,17 +1,22 @@
 @import './SassCommon.scss';
 
-$card-margin-vertical: 50px;
-$card-min-width: 80vw;
-$card-padding: 20px;
+$root-card-margin-vertical: 50px;
+$root-card-min-width: 80vw;
+$root-card-padding: 20px;
+
+$card-height: 120px;
+$card-padding: 30px;
+$root-card-margin-vertical: 40px;
+$card-image-margin: 40px;
 
 .pageRoot {
   display: flex;
   flex-direction: column;
   align-items: center;
   .rootCard {
-    margin: $card-margin-vertical 0;
-    width: calc(#{$card-min-width} - #{$card-padding*2});
-    padding: $card-padding;
+    margin: $root-card-margin-vertical 0;
+    width: calc(#{$root-card-min-width} - #{$root-card-padding*2});
+    padding: $root-card-padding;
     background-color: rgba(255, 255, 255, 0.9);
 
     .header {
@@ -22,6 +27,54 @@ $card-padding: 20px;
       h1 {
         margin: 10px 0 0 0;
         text-align: center;
+      }
+    }
+
+    .listContainer {
+      padding: 0 40px;
+      a {
+        &:hover {
+          .listCard {
+            .content {
+              color: lighten($color: #000000, $amount: 50);
+            }
+          }
+        }
+    
+        &:active {
+          .listCard {
+            .content {
+              color: lighten($color: #000000, $amount: 80);
+            }
+          }
+        }
+    
+        .listCard {
+          height: $card-height;
+          display: flex;
+          margin: $root-card-margin-vertical 0;
+          
+          background: #ffffff;
+          box-shadow:  15px 15px 30px #d9d9d9, 
+          -15px -15px 30px #ffffff;
+          img {
+            max-height: $card-height;
+            margin-right: $card-image-margin;
+          }
+          .content {
+            padding: $card-padding;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            color: #000;
+      
+            h2, p {
+              margin: 0;
+              padding: 0;
+            }
+          }
+        }
       }
     }
   }

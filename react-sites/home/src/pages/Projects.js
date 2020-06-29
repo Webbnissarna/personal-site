@@ -26,7 +26,7 @@ export default function Projects () {
           <h1>Projects</h1>
           <span>A list of various non-game projects (websites, apps etc.) I&apos;ve made or I&apos;m currently working on</span>
         </div>
-        <div className={Styles.listContainer}>
+        <div className={SharedStyles.listContainer}>
           {
             (!!error || !data) && !loading ? (
               error
@@ -36,9 +36,9 @@ export default function Projects () {
               loading ? (<span>Loading...</span>)
                 : (data.projects.map((project, index) => (
                   <a key={`project_${index}`} href={`https://${project.subdomain}.${window.location.hostname}/`}>
-                    <div className={Styles.listCard}>
+                    <div className={SharedStyles.listCard}>
                       <img src={'http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png'} />
-                      <div className={Styles.content}>
+                      <div className={SharedStyles.content}>
                         <h2>{project.title}</h2>
                         <p>{project.desc}</p>
                       </div>

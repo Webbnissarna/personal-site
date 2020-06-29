@@ -30,7 +30,7 @@ export default function Notes () {
           <h1>Notes</h1>
           <span>A collection of notes of various topics</span>
         </div>
-        <div className={Styles.listContainer}>
+        <div className={SharedStyles.listContainer}>
           {
             (!!error || !data) && !loading ? (
               error
@@ -40,14 +40,12 @@ export default function Notes () {
               loading ? (<span>Loading...</span>)
                 : (data.notes.map((note, index) => (
                   <NavLink key={`note_${index}`} to={`/notes/${note._id}`}>
-                    <div className={Styles.listCard}>
-                      <div className={Styles.content}>
-                        { note.img_key && <img alt="" src={Util.getStaticContentUrl(note.img_key)} /> }
-                        <div className={Styles.innerContent}>
-                          <h2>{note.title}</h2>
-                          <div>
-                            <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
-                          </div>
+                    <div className={SharedStyles.listCard}>
+                      { note.img_key && <img alt="" src={Util.getStaticContentUrl(note.img_key)} /> }
+                      <div className={SharedStyles.content}>
+                        <h2>{note.title}</h2>
+                        <div>
+                          <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
                         </div>
                       </div>
                     </div>
