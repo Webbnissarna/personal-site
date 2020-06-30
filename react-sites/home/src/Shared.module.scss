@@ -5,9 +5,13 @@ $root-card-min-width: 80vw;
 $root-card-padding: 20px;
 
 $card-height: 120px;
-$card-padding: 30px;
+$card-padding: 10px 20px 20px 20px;
 $root-card-margin-vertical: 40px;
-$card-image-margin: 40px;
+$card-image-margin: 20px;
+
+.spacer {
+  flex-grow: 1;
+}
 
 .pageRoot {
   display: flex;
@@ -44,18 +48,14 @@ $card-image-margin: 40px;
       padding: 0 40px;
       a {
         &:hover {
-          .listCard {
-            .content {
+          .listCard .content .metaRoot, .listCard .content .innerContent {
               color: lighten($color: #000000, $amount: 50);
-            }
           }
         }
     
         &:active {
-          .listCard {
-            .content {
+          .listCard .content .metaRoot, .listCard .content .innerContent {
               color: lighten($color: #000000, $amount: 80);
-            }
           }
         }
     
@@ -67,21 +67,38 @@ $card-image-margin: 40px;
           background: #ffffff;
           box-shadow:  15px 15px 30px #d9d9d9, 
           -15px -15px 30px #ffffff;
+
           img {
             max-height: $card-height;
             margin-right: $card-image-margin;
           }
+
           .content {
-            padding: $card-padding;
-            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
-            color: #000;
-      
-            h2, p {
-              margin: 0;
-              padding: 0;
+            flex-grow: 1;
+
+            .metaRoot {
+              display: flex;
+              font-size: 0.8em;
+              opacity: 0.5;
+              color: #000;
+              margin: 3px;
+            }
+  
+            .innerContent {
+              padding: $card-padding;
+              flex-grow: 1;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-around;
+              color: #000;
+              
+              h2, p {
+                margin: 0;
+                padding: 0;
+              }
+  
             }
           }
         }

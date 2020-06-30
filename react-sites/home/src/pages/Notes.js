@@ -43,9 +43,15 @@ export default function Notes () {
                     <div className={SharedStyles.listCard}>
                       { note.img_key && <img alt="" src={Util.getStaticContentUrl(note.img_key)} /> }
                       <div className={SharedStyles.content}>
-                        <h2>{note.title}</h2>
-                        <div>
-                          <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
+                        <div className={SharedStyles.metaRoot}>
+                          <div className={SharedStyles.spacer} />
+                          <span>{Util.formatDateNumber(note.post_date)}</span>
+                        </div>
+                        <div className={SharedStyles.innerContent}>
+                          <h2>{note.title}</h2>
+                          <div>
+                            <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -39,8 +39,10 @@ export default function Projects () {
                     <div className={SharedStyles.listCard}>
                       <img src={'http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png'} />
                       <div className={SharedStyles.content}>
-                        <h2>{project.title}</h2>
-                        <p>{project.desc}</p>
+                        <div className={SharedStyles.innerContent}>
+                          <h2>{project.title}</h2>
+                          <p>{project.desc}</p>
+                        </div>
                       </div>
                     </div>
                   </a>
