@@ -13,6 +13,21 @@ $card-image-margin: 20px;
   flex-grow: 1;
 }
 
+.tagRoot {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .tag {
+    margin: 0px 3px;
+    padding: 2px 4px;
+    color: #fff;
+    font-size: 0.8em;
+    background-color: rgba(0, 0, 255, 1);
+    border-radius: 2px;
+  }
+}
+
 .pageRoot {
   display: flex;
   flex-direction: column;
