@@ -42,7 +42,7 @@ $card-image-margin: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 20px;
+      margin: 20px 0;
       
       h1 {
         margin: 10px 0 0 0;
@@ -113,6 +113,35 @@ $card-image-margin: 20px;
                 padding: 0;
               }
   
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (#{$portrait-query}) {
+  .pageRoot {
+    .rootCard {
+      margin: 0;
+      width: calc(100vw - #{$root-card-padding*2});
+      min-height: calc(100vh - #{$root-card-padding*2});
+
+      .listContainer {
+        padding: 0;
+
+        a {          
+          .listCard {
+            flex-direction: column;
+            height: auto;
+  
+            img {
+              margin: 0;
+              max-height: 100%;
+              max-width: 100%;
+              width: auto;
+              height: auto;
             }
           }
         }
