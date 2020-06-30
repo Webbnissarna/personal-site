@@ -40,6 +40,7 @@ exports.api = {
         img_key: String,
         desc: String,
         post_date: Date,
+        tags: [String],
         body: String
       })
     ]);

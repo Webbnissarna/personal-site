@@ -30,5 +30,6 @@ type Note {
     img_key: String
     desc: String
     post_date: String
+    tags: [String]
     body: String
 }
