@@ -43,7 +43,7 @@ export default function Notes () {
                 : (data.notes.map((note, index) => (
                   <NavLink key={`note_${index}`} to={`/notes/${note._id}`}>
                     <div className={SharedStyles.listCard}>
-                      { note.img_key && <img alt="" src={Util.getStaticContentUrl(note.img_key)} /> }
+                      { note.img_key && <div className={SharedStyles.img} style={{ backgroundImage: `url(${Util.getStaticContentUrl(note.img_key)})` }} /> }
                       <div className={SharedStyles.content}>
                         <div className={SharedStyles.metaRoot}>
                           <Tags tags={note.tags} keyPrefix={`note_${index}`} />

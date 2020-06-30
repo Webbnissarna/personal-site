@@ -37,7 +37,7 @@ export default function Projects () {
                 : (data.projects.map((project, index) => (
                   <a key={`project_${index}`} href={`https://${project.subdomain}.${window.location.hostname}/`}>
                     <div className={SharedStyles.listCard}>
-                      <img src={'http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png'} />
+                      <div className={SharedStyles.img} style={{ backgroundImage: 'url(http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png)' }} />
                       <div className={SharedStyles.content}>
                         <div className={SharedStyles.innerContent}>
                           <h2>{project.title}</h2>

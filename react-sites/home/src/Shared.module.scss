@@ -4,7 +4,6 @@ $root-card-margin-vertical: 50px;
 $root-card-min-width: 80vw;
 $root-card-padding: 20px;
 
-$card-height: 120px;
 $card-padding: 10px 20px 20px 20px;
 $root-card-margin-vertical: 40px;
 $card-image-margin: 20px;
@@ -76,7 +75,6 @@ $card-image-margin: 20px;
         }
     
         .listCard {
-          height: $card-height;
           display: flex;
           margin: $root-card-margin-vertical 0;
           
@@ -84,15 +82,19 @@ $card-image-margin: 20px;
           box-shadow:  15px 15px 30px #d9d9d9, 
           -15px -15px 30px #ffffff;
 
-          img {
-            max-height: $card-height;
+          .img {
             margin-right: $card-image-margin;
+            max-width: calc(min(50%, 300px));
+            background-size: cover;
+            background-color: #0F0;
+            flex-basis: 100%;
           }
 
           .content {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            flex-basis: 100%;
 
             .metaRoot {
               display: flex;
@@ -137,12 +139,12 @@ $card-image-margin: 20px;
             flex-direction: column;
             height: auto;
   
-            img {
+            .img {
               margin: 0;
-              max-height: 100%;
+              width: 100%;
               max-width: 100%;
-              width: auto;
-              height: auto;
+              height: 120px;
+              flex-basis: auto;
             }
           }
         }
