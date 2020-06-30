@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import Styles from './Games.module.scss'
 import SharedStyles from '../Shared.module.scss'
+import Tags from '../components/Tags'
 
 export default function Games () {
   const { data, loading, error } = useQuery(gql`
@@ -13,6 +14,7 @@ export default function Games () {
         highlight
         title
         desc
+        tags
         release_date
       }
     }
@@ -41,6 +43,7 @@ export default function Games () {
                     <div className={Styles.listCard} style={{ backgroundImage: 'url(http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png)' }}>
                       <div className={Styles.content}>
                         <h2>{game.title}</h2>
+                        <Tags tags={game.tags} keyPrefix={`game_${index}`} />
                         <p>{game.desc}</p>
                       </div>
                     </div>

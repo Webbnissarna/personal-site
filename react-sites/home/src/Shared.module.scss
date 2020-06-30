@@ -63,14 +63,14 @@ $card-image-margin: 20px;
       padding: 0 40px;
       a {
         &:hover {
-          .listCard .content .metaRoot, .listCard .content .innerContent {
-              color: lighten($color: #000000, $amount: 50);
+          .listCard {
+              opacity: 0.9;
           }
         }
     
         &:active {
-          .listCard .content .metaRoot, .listCard .content .innerContent {
-              color: lighten($color: #000000, $amount: 80);
+          .listCard {
+              opacity: 0.8;
           }
         }
     
@@ -96,8 +96,7 @@ $card-image-margin: 20px;
             .metaRoot {
               display: flex;
               font-size: 0.8em;
-              opacity: 0.5;
-              color: #000;
+              color: rgba(0, 0, 0, 0.5);
               margin: 3px;
             }
   

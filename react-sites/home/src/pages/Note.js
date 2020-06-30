@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import Styles from './Note.module.scss'
 import SharedStyles from '../Shared.module.scss'
 import Util from '../Util.js'
+import Tags from '../components/Tags'
 
 export default function Note () {
   const { id } = useParams()
@@ -15,6 +16,7 @@ export default function Note () {
         title
         img_key
         post_date
+        tags
         body
       }
     }
@@ -38,6 +40,7 @@ export default function Note () {
                   { data.note.img_key && <img className={SharedStyles.headerImage} alt="" src={Util.getStaticContentUrl(data.note.img_key)} /> }
                   <h1>{data.note.title}</h1>
                   <span className={SharedStyles.subtitle}>{Util.formatDateNumber(data.note.post_date)}</span>
+                  <Tags tags={data.note.tags} />
                 </div>
                 <div>
                   <ReactMarkdown source={data.note.body} />

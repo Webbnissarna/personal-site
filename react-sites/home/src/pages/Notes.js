@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import Styles from './Notes.module.scss'
 import SharedStyles from '../Shared.module.scss'
 import Util from '../Util.js'
+import Tags from '../components/Tags'
 
 export default function Notes () {
   const { data, loading, error } = useQuery(gql`
@@ -16,6 +17,7 @@ export default function Notes () {
         img_key
         desc
         post_date
+        tags
       }
     }
   `)
@@ -44,6 +46,7 @@ export default function Notes () {
                       { note.img_key && <img alt="" src={Util.getStaticContentUrl(note.img_key)} /> }
                       <div className={SharedStyles.content}>
                         <div className={SharedStyles.metaRoot}>
+                          <Tags tags={note.tags} keyPrefix={`note_${index}`} />
                           <div className={SharedStyles.spacer} />
                           <span>{Util.formatDateNumber(note.post_date)}</span>
                         </div>

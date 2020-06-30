@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks'
 import SharedStyles from '../Shared.module.scss'
 import ReactMarkdown from 'react-markdown'
 import Util from '../Util.js'
+import Tags from '../components/Tags'
 
 export default function Game () {
   const { id } = useParams()
@@ -13,6 +14,7 @@ export default function Game () {
       game(_id: "${id}") {
         title
         release_date
+        tags
         body
       }
     }
@@ -36,6 +38,7 @@ export default function Game () {
                   <img className={SharedStyles.headerImage} alt="" src={'http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png'} />
                   <h1>{data.game.title}</h1>
                   <span className={SharedStyles.subtitle}>{Util.formatDateNumber(data.game.release_date)}</span>
+                  <Tags tags={data.game.tags} />
                 </div>
                 <div>
                   <ReactMarkdown source={data.game.body} />
