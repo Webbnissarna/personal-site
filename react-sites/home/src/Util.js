@@ -11,3 +11,5 @@ exports.formatDateNumber = function (num) {
 exports.getStaticContentUrl = function (key) {
   return `${window.location.protocol}//api.${window.location.hostname}/_files/main/${key}`
 }
+
+exports.mod = (x, n) => ((x % n + n) % n)
