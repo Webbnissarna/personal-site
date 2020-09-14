@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const { createModel } = require('mongoose-gridfs')
 const path = require('path')
 
-let dbCon = null
+let dbConFiles = null
+let dbConMain = null
 let gridfsModel = null
 let notesModel = null
 
@@ -26,9 +27,9 @@ function registerSchemaAndGetModel (dbCon, modelName, schemaObj) {
   return model
 }
 
-function getAllEntries (modelName) {
+function getAllEntries (dbCon, modelName) {
   return new Promise((resolve, reject) => {
-    console.log(`getAllEntries ${modelName}`)
+    console.log(`getAllEntries ${dbCon.name}::${modelName}`)
     dbCon.model(modelName).find()
       .then((res) => {
         console.log(`getAllEntries ${modelName} got ${res.length}`)
@@ -41,37 +42,41 @@ function getAllEntries (modelName) {
   })
 }
 
-async function ensureConnection (connectionString) {
-  if (dbCon === null) {
-    await mongoose.createConnection(connectionString, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    }).then((c) => {
-      dbCon = c
-
-      gridfsModel = createModel({
-        modelName: 'File',
-        connection: dbCon
-      })
-      notesModel = registerSchemaAndGetModel(dbCon, 'Note', notesModelObj)
-    })
-  }
+function connectToDB (dbName) {
+  console.log(`Connecting to ${dbName}`)
+  return mongoose.createConnection(`mongodb://root:password@masterkenth-test.com:27017/${dbName}?authSource=admin`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
 }
 
 ipcMain.on('mongo-connect', (event, arg) => {
-  console.log(`mongo-connect ${arg.uri}`)
-  ensureConnection(arg.uri)
+  console.log('mongo-connect')
+  connectToDB('files')
     .then((con) => {
+      dbConFiles = con
+      gridfsModel = createModel({
+        modelName: 'File',
+        connection: dbConFiles
+      })
+    })
+    .then(() => connectToDB('main'))
+    .then((con) => {
+      dbConMain = con
+      notesModel = registerSchemaAndGetModel(con, 'Note', notesModelObj)
+    })
+    .then(() => {
       console.log('mongo-connect connected')
       event.reply('mongo-connect', {})
     }).catch((e) => {
-      console.log(`mongo-connect error ${e}`)
+      console.log('mongo-connect error')
+      console.log(e)
       event.reply('mongo-connect', { error: e.toString() })
     })
 })
 
 ipcMain.on('mongo-files-list', (event, arg) => {
-  getAllEntries('File')
+  getAllEntries(dbConFiles, 'File')
     .then((res) => event.reply('mongo-files-list', res))
     .catch((e) => event.reply('mongo-files-list', { error: e }))
 })
@@ -79,7 +84,7 @@ ipcMain.on('mongo-files-list', (event, arg) => {
 ipcMain.on('mongo-files-rename', (event, arg) => {
   const { id, newFilename } = arg
   console.log(`rename id=${id} new=${newFilename}`)
-  dbCon.model('File').updateOne({ _id: id }, { filename: newFilename })
+  dbConFiles.model('File').updateOne({ _id: id }, { filename: newFilename })
     .then((res) => {
       console.log(`mongo-files-rename got ${res}`)
       console.log(res)
@@ -144,6 +149,12 @@ ipcMain.on('mongo-files-delete', (event, arg) => {
     .catch((e) => {
       event.reply('mongo-files-delete', { error: e.toString() })
     })
+})
+
+ipcMain.on('mongo-notes-list', (event, arg) => {
+  getAllEntries(dbConMain, 'Note')
+    .then((res) => event.reply('mongo-notes-list', res))
+    .catch((e) => event.reply('mongo-notes-list', { error: e }))
 })
 
 let mainWindow
