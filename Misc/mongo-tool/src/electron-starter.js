@@ -26,6 +26,21 @@ function registerSchemaAndGetModel (dbCon, modelName, schemaObj) {
   return model
 }
 
+function getAllEntries (modelName) {
+  return new Promise((resolve, reject) => {
+    console.log(`getAllEntries ${modelName}`)
+    dbCon.model(modelName).find()
+      .then((res) => {
+        console.log(`getAllEntries ${modelName} got ${res.length}`)
+        resolve(res.map(o => ({ ...o.toObject(), id: o._id.toString() })))
+      })
+      .catch((e) => {
+        console.log(`getAllEntries ${modelName} error: ${e.toString()}`)
+        reject(e)
+      })
+  })
+}
+
 async function ensureConnection (connectionString) {
   if (dbCon === null) {
     await mongoose.createConnection(connectionString, {
@@ -56,16 +71,9 @@ ipcMain.on('mongo-connect', (event, arg) => {
 })
 
 ipcMain.on('mongo-list', (event, arg) => {
-  console.log('mongo-list')
-  dbCon.model('File').find()
-    .then((res) => {
-      console.log(`mongo-list got ${res.length}`)
-      event.reply('mongo-list', res.map(o => ({ ...o.toObject(), id: o._id.toString() })))
-    })
-    .catch((e) => {
-      console.log(`mongo-list error ${e}`)
-      event.reply('mongo-list', { error: e.toString() })
-    })
+  getAllEntries('File')
+    .then((res) => event.reply('mongo-list', res))
+    .catch((e) => event.reply('mongo-list', { error: e }))
 })
 
 ipcMain.on('mongo-rename', (event, arg) => {
