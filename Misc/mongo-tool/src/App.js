@@ -14,8 +14,9 @@ const ipcRenderer = electron.ipcRenderer
 function App () {
   const [infoText, setInfoText] = useState({ type: 'warn', text: '' })
   const [loading, setLoading] = useState({ visible: false, text: '' })
-  const [mongoStatus, setMongoStatus] = useState({ connected: false, uri: 'mongodb://root:password@masterkenth-test.com:27017/files?authSource=admin' })
+  const [mongoStatus, setMongoStatus] = useState({ connected: false })
   const [files, setFiles] = useState([])
+  const [notes, setNotes] = useState([])
   const [tab, setTab] = useState('notes')
 
   const callIpc = (func, data, loadingText, cb) => {
@@ -29,24 +30,27 @@ function App () {
   }
 
   const callConnect = () => {
-    callIpc('mongo-connect', { uri: mongoStatus.uri }, `Connecting to ${mongoStatus.uri}`, (res) => {
+    callIpc('mongo-connect', { uri: mongoStatus.uri }, 'Connecting', (res) => {
       setMongoStatus(p => ({ ...p, connected: !res.error }))
       if (!res.error) {
-        callRefresh()
+        callRefreshFiles()
+        callRefreshNotes()
       }
     })
   }
 
-  const callRefresh = () => {
+  const callRefreshFiles = () => {
     callIpc('mongo-files-list', null, 'Refreshing list', (res) => {
       setFiles(res)
       console.log(res)
     })
   }
 
-  const handleConnectInput = (e) => {
-    const value = e.currentTarget.value
-    setMongoStatus(p => ({ ...p, uri: value }))
+  const callRefreshNotes = () => {
+    callIpc('mongo-notes-list', null, 'Refreshing list', (res) => {
+      setNotes(res)
+      console.log(res)
+    })
   }
 
   const handleRename = (file, newFilename) => {
@@ -54,7 +58,7 @@ function App () {
       console.log(res)
       setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
       if (!res.error) {
-        callRefresh()
+        callRefreshFiles()
       }
     })
   }
@@ -64,7 +68,7 @@ function App () {
       console.log(res)
       setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
       if (!res.error) {
-        callRefresh()
+        callRefreshFiles()
       }
     })
   }
@@ -79,7 +83,7 @@ function App () {
       console.log(res)
       setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
       if (!res.error) {
-        callRefresh()
+        callRefreshFiles()
       }
     })
   }
@@ -90,13 +94,6 @@ function App () {
       <div className={Styles.actionBar}
         sx={{ gap: 1, p: 1 }}
       >
-        <input
-          type="Text"
-          placeholder="mongodb://<user>:<password>@<host>:<port>/<db>?authSource=<authdb>"
-          value={mongoStatus.uri}
-          onChange={handleConnectInput}
-          spellCheck={false}
-        />
         <button onClick={callConnect}>
           Connect
         </button>
@@ -133,7 +130,9 @@ function App () {
           { tab === 'upload' && <UploadForm
             onUpload={handleUpload}
           />}
-          { tab === 'notes' && <Notes />}
+          { tab === 'notes' && <Notes
+            notes={notes}
+          />}
         </div>
       </div>
 
