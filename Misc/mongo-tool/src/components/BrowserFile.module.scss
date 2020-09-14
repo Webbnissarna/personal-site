@@ -43,7 +43,7 @@
   }
 
   &.list {
-    grid-template: 1fr / 15px 15px repeat(5, 1fr);
+    grid-template: 1fr / 15px 15px 4fr 1fr 1fr 2fr 2fr;
     justify-items: left;
     align-items: center;
 

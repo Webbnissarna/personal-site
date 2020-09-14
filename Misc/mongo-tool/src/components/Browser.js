@@ -8,6 +8,8 @@ import Styles from './Browser.module.scss'
 import _ from 'lodash'
 import BrowserFile from './BrowserFile'
 
+const electron = window.require('electron')
+
 function bytesToString (bytes) {
   if (bytes < 1000) { return `${bytes} b` } else if (bytes < 1000 * 1000) { return `${bytes / 1000} Kb` } else { return `${bytes / 1000 / 1000} Mb` }
 }
@@ -85,6 +87,20 @@ export default function Browser ({ files, onRename, onDelete }) {
     onDelete(sortedFiles.filter(f => f.selected))
   }
 
+  const copyDownloadUrlToClipboard = () => {
+    const f = sortedFiles.find(f => f.selected)
+    electron.clipboard.writeText(`https://api.masterkenth.com/_files/${f.file.filename}`)
+  }
+
+  const copyDownloadKeyToClipboard = () => {
+    const files = sortedFiles.filter(f => f.selected)
+    if (files.length === 1) {
+      electron.clipboard.writeText(files[0].file.filename)
+    } else {
+      electron.clipboard.writeText(JSON.stringify(files.map(f => f.file.filename)))
+    }
+  }
+
   return (
     <div
       className={Styles.browserRoot}
@@ -129,10 +145,12 @@ export default function Browser ({ files, onRename, onDelete }) {
         sx={{ gap: 1 }}
       >
         <span>{numSelected} selected</span>
-        <button disabled={numSelected <= 0 || true}>Download ({numSelected})</button>
-        <button disabled={numSelected <= 0} onClick={doDelete}>Delete ({numSelected})</button>
+        <button disabled={numSelected <= 0 || true}><span>Download ({numSelected})</span></button>
+        <button disabled={numSelected <= 0} onClick={doDelete}><span>Delete ({numSelected})</span></button>
         <button disabled={numSelected !== 1} onClick={doRename}>Rename</button>
         <input disabled={numSelected !== 1} type='text' value={renameString} onChange={handleRenameInput} />
+        <button disabled={numSelected !== 1} onClick={copyDownloadUrlToClipboard}>C</button>
+        <button disabled={numSelected <= 0} onClick={copyDownloadKeyToClipboard}>K</button>
       </div>
     </div>
   )
