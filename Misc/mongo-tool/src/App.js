@@ -7,6 +7,7 @@ import LoadingOverlay from './components/LoadingOverlay'
 import Browser from './components/Browser'
 import UploadForm from './components/UploadForm'
 import Notes from './components/Notes'
+import AddNoteForm from './components/AddNoteForm'
 
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
@@ -17,7 +18,7 @@ function App () {
   const [mongoStatus, setMongoStatus] = useState({ connected: false })
   const [files, setFiles] = useState([])
   const [notes, setNotes] = useState([])
-  const [tab, setTab] = useState('notes')
+  const [tab, setTab] = useState('addNote')
 
   const callIpc = (func, data, loadingText, cb) => {
     setLoading(p => ({ ...p, visible: true, text: loadingText }))
@@ -74,16 +75,27 @@ function App () {
   }
 
   const gotoBrowser = () => setTab('browser')
-  const gotoUpload = () => setTab('upload')
+  const gotoFileUpload = () => setTab('uploadFile')
   const gotoNotes = () => setTab('notes')
+  const gotoAddNote = () => setTab('addNote')
 
-  const handleUpload = (files) => {
+  const handleFileUpload = (files) => {
     console.log(files)
     callIpc('mongo-files-upload', { files: files }, 'Uploading', (res) => {
       console.log(res)
       setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
       if (!res.error) {
         callRefreshFiles()
+      }
+    })
+  }
+
+  const handleNoteUpload = (note) => {
+    callIpc('mongo-note-upload', note, 'Uploading', (res) => {
+      console.log(res)
+      setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
+      if (!res.error) {
+        callRefreshNotes()
       }
     })
   }
@@ -111,11 +123,14 @@ function App () {
           <button disabled={!mongoStatus.connected || tab === 'browser'} onClick={gotoBrowser}>
             Browser
           </button>
-          <button disabled={!mongoStatus.connected || tab === 'upload'} onClick={gotoUpload}>
-            Upload
+          <button disabled={!mongoStatus.connected || tab === 'uploadFile'} onClick={gotoFileUpload}>
+            Upload File
           </button>
           <button disabled={!mongoStatus.connected || tab === 'notes'} onClick={gotoNotes}>
             Notes
+          </button>
+          <button disabled={!mongoStatus.connected || tab === 'addNote'} onClick={gotoAddNote}>
+            Add Note
           </button>
         </div>
         <div
@@ -127,11 +142,14 @@ function App () {
             onRename={handleRename}
             onDelete={handleDelete}
           /> }
-          { tab === 'upload' && <UploadForm
-            onUpload={handleUpload}
+          { tab === 'uploadFile' && <UploadForm
+            onUpload={handleFileUpload}
           />}
           { tab === 'notes' && <Notes
             notes={notes}
+          />}
+          { tab === 'addNote' && <AddNoteForm
+            onUpload={handleNoteUpload}
           />}
         </div>
       </div>

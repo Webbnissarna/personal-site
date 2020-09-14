@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const fs = require('fs')
+const fsp = fs.promises
 const mongoose = require('mongoose')
 const { createModel } = require('mongoose-gridfs')
 const path = require('path')
@@ -7,15 +8,15 @@ const path = require('path')
 let dbConFiles = null
 let dbConMain = null
 let gridfsModel = null
-let notesModel = null
+let NotesModel = null
 
 const notesModelObj = {
   _id: String,
   hidden: Boolean,
   title: String,
-  img_key: String,
   desc: String,
-  post_date: Date,
+  uploadDate: Date,
+  imageKey: String,
   tags: [String],
   body: String
 }
@@ -46,7 +47,8 @@ function connectToDB (dbName) {
   console.log(`Connecting to ${dbName}`)
   return mongoose.createConnection(`mongodb://root:password@masterkenth-test.com:27017/${dbName}?authSource=admin`, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   })
 }
 
@@ -63,7 +65,7 @@ ipcMain.on('mongo-connect', (event, arg) => {
     .then(() => connectToDB('main'))
     .then((con) => {
       dbConMain = con
-      notesModel = registerSchemaAndGetModel(con, 'Note', notesModelObj)
+      NotesModel = registerSchemaAndGetModel(con, 'Note', notesModelObj)
     })
     .then(() => {
       console.log('mongo-connect connected')
@@ -155,6 +157,30 @@ ipcMain.on('mongo-notes-list', (event, arg) => {
   getAllEntries(dbConMain, 'Note')
     .then((res) => event.reply('mongo-notes-list', res))
     .catch((e) => event.reply('mongo-notes-list', { error: e }))
+})
+
+ipcMain.on('mongo-note-upload', async (event, arg) => {
+  const noteData = {
+    ...arg,
+    _id: arg.id,
+    body: await fsp.readFile(arg._meta.path, 'utf-8'),
+    uploadDate: new Date()
+  }
+
+  let p = null
+  if (arg._meta.update) {
+    p = NotesModel.findByIdAndUpdate(noteData._id, noteData)
+  } else {
+    const note = new NotesModel(noteData)
+    p = note.save()
+  }
+
+  p
+    .then(() => event.reply('mongo-note-upload', {}))
+    .catch((e) => {
+      console.log(`mongo-note-upload error=${e.toString()}`)
+      event.reply('mongo-note-upload', { error: e.toString() })
+    })
 })
 
 let mainWindow
