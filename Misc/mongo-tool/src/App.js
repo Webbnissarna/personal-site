@@ -38,7 +38,7 @@ function App () {
   }
 
   const callRefresh = () => {
-    callIpc('mongo-list', null, 'Refreshing list', (res) => {
+    callIpc('mongo-files-list', null, 'Refreshing list', (res) => {
       setFiles(res)
       console.log(res)
     })
@@ -50,7 +50,7 @@ function App () {
   }
 
   const handleRename = (file, newFilename) => {
-    callIpc('mongo-rename', { id: file.file.id, newFilename: newFilename }, 'Renaming', (res) => {
+    callIpc('mongo-files-rename', { id: file.file.id, newFilename: newFilename }, 'Renaming', (res) => {
       console.log(res)
       setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
       if (!res.error) {
@@ -60,7 +60,7 @@ function App () {
   }
 
   const handleDelete = (files) => {
-    callIpc('mongo-delete', { files: files.map(f => f.file.id) }, 'Deleting', (res) => {
+    callIpc('mongo-files-delete', { files: files.map(f => f.file.id) }, 'Deleting', (res) => {
       console.log(res)
       setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
       if (!res.error) {
@@ -75,7 +75,7 @@ function App () {
 
   const handleUpload = (files) => {
     console.log(files)
-    callIpc('mongo-upload', { files: files }, 'Uploading', (res) => {
+    callIpc('mongo-files-upload', { files: files }, 'Uploading', (res) => {
       console.log(res)
       setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
       if (!res.error) {

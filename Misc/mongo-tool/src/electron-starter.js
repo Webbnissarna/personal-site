@@ -70,30 +70,30 @@ ipcMain.on('mongo-connect', (event, arg) => {
     })
 })
 
-ipcMain.on('mongo-list', (event, arg) => {
+ipcMain.on('mongo-files-list', (event, arg) => {
   getAllEntries('File')
-    .then((res) => event.reply('mongo-list', res))
-    .catch((e) => event.reply('mongo-list', { error: e }))
+    .then((res) => event.reply('mongo-files-list', res))
+    .catch((e) => event.reply('mongo-files-list', { error: e }))
 })
 
-ipcMain.on('mongo-rename', (event, arg) => {
+ipcMain.on('mongo-files-rename', (event, arg) => {
   const { id, newFilename } = arg
   console.log(`rename id=${id} new=${newFilename}`)
   dbCon.model('File').updateOne({ _id: id }, { filename: newFilename })
     .then((res) => {
-      console.log(`mongo-rename got ${res}`)
+      console.log(`mongo-files-rename got ${res}`)
       console.log(res)
-      event.reply('mongo-rename', {})
+      event.reply('mongo-files-rename', {})
     })
     .catch((e) => {
-      console.log(`mongo-rename error ${e}`)
-      event.reply('mongo-rename', { error: e.toString() })
+      console.log(`mongo-files-rename error ${e}`)
+      event.reply('mongo-files-rename', { error: e.toString() })
     })
 })
 
-ipcMain.on('mongo-upload', (event, arg) => {
+ipcMain.on('mongo-files-upload', (event, arg) => {
   const { files } = arg
-  console.log(`mongo-upload ${files.length} files`)
+  console.log(`mongo-files-upload ${files.length} files`)
   const promises = []
   for (let i = 0; i < files.length; i++) {
     const { key, filePath, contentType } = files[i]
@@ -113,22 +113,22 @@ ipcMain.on('mongo-upload', (event, arg) => {
 
   Promise.all(promises)
     .then(() => {
-      event.reply('mongo-upload', {})
+      event.reply('mongo-files-upload', {})
     })
     .catch((e) => {
-      event.reply('mongo-upload', { error: e.toString() })
+      event.reply('mongo-files-upload', { error: e.toString() })
     })
 })
 
-ipcMain.on('mongo-delete', (event, arg) => {
+ipcMain.on('mongo-files-delete', (event, arg) => {
   const { files } = arg
-  console.log(`mongo-delete ${files.join(', ')}`)
+  console.log(`mongo-files-delete ${files.join(', ')}`)
   const promises = []
   for (let i = 0; i < files.length; i++) {
     const id = files[i]
     promises.push(new Promise((resolve, reject) => {
       gridfsModel.unlink(id, (err) => {
-        console.log(`mongo-delete error=${err}`)
+        console.log(`mongo-files-delete error=${err}`)
         if (err) {
           reject(err)
         } else {
@@ -139,10 +139,10 @@ ipcMain.on('mongo-delete', (event, arg) => {
   }
   Promise.all(promises)
     .then(() => {
-      event.reply('mongo-delete', {})
+      event.reply('mongo-files-delete', {})
     })
     .catch((e) => {
-      event.reply('mongo-delete', { error: e.toString() })
+      event.reply('mongo-files-delete', { error: e.toString() })
     })
 })
 
