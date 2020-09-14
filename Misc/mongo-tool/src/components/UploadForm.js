@@ -10,7 +10,7 @@ function bytesToString (bytes) {
   if (bytes < 1000) { return `${bytes} b` } else if (bytes < 1000 * 1000) { return `${bytes / 1000} Kb` } else { return `${bytes / 1000 / 1000} Mb` }
 }
 
-export default function UploadForm ({ onUpload, disabled }) {
+export default function UploadForm ({ onUpload }) {
   const [preppedFiles, setPreppedFiles] = useState([])
   const [previewUri, setPreviewUri] = useState(null)
   const [meta, setMeta] = useState({ dir: '', size: -1 })
@@ -81,30 +81,29 @@ export default function UploadForm ({ onUpload, disabled }) {
         <h1>Upload</h1>
         { previewUri && <img src={previewUri} alt='preview' /> }
         <input
-          disabled={disabled || preppedFiles.length < 2}
+          disabled={preppedFiles.length < 2}
           type='text'
           placeholder='Dir'
           value={meta.dir}
           onChange={handleDirInput} />
         <input
-          disabled={disabled || preppedFiles.length !== 1}
+          disabled={preppedFiles.length !== 1}
           type='text'
           placeholder='Key'
           value={preppedFiles.length > 0 ? preppedFiles[0].key : ''}
           onChange={handleKeyInput} />
         <input
-          disabled={disabled || preppedFiles.length !== 1}
+          disabled={preppedFiles.length !== 1}
           type='text'
           placeholder='Content Type'
           value={preppedFiles.length > 0 ? preppedFiles[0].contentType : ''}
           onChange={handleTypeInput} />
         <input
-          disabled={disabled}
           type='file'
           multiple={true}
           ref={fileInputRef}
           onChange={handleFileInput} />
-        <button disabled={disabled || preppedFiles.length === 0} onClick={handleUpload}>Upload</button>
+        <button disabled={preppedFiles.length === 0} onClick={handleUpload}>Upload</button>
         { meta.size >= 0 && <span>{bytesToString(meta.size)}</span> }
       </div>
     </div>
@@ -112,6 +111,5 @@ export default function UploadForm ({ onUpload, disabled }) {
 }
 
 UploadForm.propTypes = {
-  onUpload: PropTypes.func,
-  disabled: PropTypes.bool
+  onUpload: PropTypes.func
 }
