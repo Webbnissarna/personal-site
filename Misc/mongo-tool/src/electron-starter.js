@@ -131,7 +131,7 @@ function createWindow () {
     }
   })
 
-  mainWindow.loadURL('http://localhost:3000')
+  mainWindow.loadURL('http://localhost:3001')
   /*  mainWindow.loadURL(`file://${path.join(__dirname, '/../build/index.html')}`) */
   // mainWindow.webContents.openDevTools()
 
