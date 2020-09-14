@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const { createModel } = require('mongoose-gridfs')
+const path = require('path')
 
 let dbCon = null
 let gridfsModel = null
@@ -63,14 +64,32 @@ ipcMain.on('mongo-rename', (event, arg) => {
 })
 
 ipcMain.on('mongo-upload', (event, arg) => {
-  const { key, filepath, type } = arg
-  console.log(`upload key=${key} filepath=${filepath} type=${type}`)
-  const readStream = fs.createReadStream(filepath)
-  const gridfsOptions = ({ filename: key, contentType: type })
-  gridfsModel.write(gridfsOptions, readStream, (err, file) => {
-    console.log(`upload ${key} error=${err}`)
-    event.reply('mongo-upload', err ? { error: err.toString() } : {})
-  })
+  const { files } = arg
+  console.log(`mongo-upload ${files.length} files`)
+  const promises = []
+  for (let i = 0; i < files.length; i++) {
+    const { key, filePath, contentType } = files[i]
+    promises.push(new Promise((resolve, reject) => {
+      const readStream = fs.createReadStream(filePath)
+      const gridfsOptions = ({ filename: key, contentType: contentType })
+      gridfsModel.write(gridfsOptions, readStream, (err, file) => {
+        console.log(`upload ${key} error=${err}`)
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    }))
+  }
+
+  Promise.all(promises)
+    .then(() => {
+      event.reply('mongo-upload', {})
+    })
+    .catch((e) => {
+      event.reply('mongo-upload', { error: e.toString() })
+    })
 })
 
 ipcMain.on('mongo-delete', (event, arg) => {
@@ -113,6 +132,7 @@ function createWindow () {
   })
 
   mainWindow.loadURL('http://localhost:3000')
+  /*  mainWindow.loadURL(`file://${path.join(__dirname, '/../build/index.html')}`) */
   // mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
