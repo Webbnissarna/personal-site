@@ -1,0 +1,4 @@
+.list {
+  display: grid;
+  grid-template: repeat(auto-fit, 1fr) / 1fr;
+}
