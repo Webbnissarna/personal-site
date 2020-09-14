@@ -6,6 +6,25 @@ const path = require('path')
 
 let dbCon = null
 let gridfsModel = null
+let notesModel = null
+
+const notesModelObj = {
+  _id: String,
+  hidden: Boolean,
+  title: String,
+  img_key: String,
+  desc: String,
+  post_date: Date,
+  tags: [String],
+  body: String
+}
+
+function registerSchemaAndGetModel (dbCon, modelName, schemaObj) {
+  const schema = new mongoose.Schema(schemaObj)
+  const model = dbCon.model(modelName, schema)
+  console.log(`registered model ${dbCon.name}::${modelName}`)
+  return model
+}
 
 async function ensureConnection (connectionString) {
   if (dbCon === null) {
@@ -19,6 +38,7 @@ async function ensureConnection (connectionString) {
         modelName: 'File',
         connection: dbCon
       })
+      notesModel = registerSchemaAndGetModel(dbCon, 'Note', notesModelObj)
     })
   }
 }
