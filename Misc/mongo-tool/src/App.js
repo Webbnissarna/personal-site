@@ -6,6 +6,7 @@ import InfoText from './components/InfoText'
 import LoadingOverlay from './components/LoadingOverlay'
 import Browser from './components/Browser'
 import UploadForm from './components/UploadForm'
+import Notes from './components/Notes'
 
 const electron = window.require('electron')
 const ipcRenderer = electron.ipcRenderer
@@ -15,7 +16,7 @@ function App () {
   const [loading, setLoading] = useState({ visible: false, text: '' })
   const [mongoStatus, setMongoStatus] = useState({ connected: false, uri: 'mongodb://root:password@masterkenth-test.com:27017/files?authSource=admin' })
   const [files, setFiles] = useState([])
-  const [tab, setTab] = useState('browser')
+  const [tab, setTab] = useState('notes')
 
   const callIpc = (func, data, loadingText, cb) => {
     setLoading(p => ({ ...p, visible: true, text: loadingText }))
@@ -69,8 +70,8 @@ function App () {
   }
 
   const gotoBrowser = () => setTab('browser')
-
   const gotoUpload = () => setTab('upload')
+  const gotoNotes = () => setTab('notes')
 
   const handleUpload = (files) => {
     console.log(files)
@@ -101,25 +102,41 @@ function App () {
         </button>
         <InfoText type={mongoStatus.connected ? 'good' : 'warn'} text={mongoStatus.connected ? 'connected' : 'not connected'} />
         <InfoText type={infoText.type} text={infoText.text} />
-        <div className={Styles.tabs}>
-          <button disabled={tab === 'browser'} onClick={gotoBrowser}>
-            B
+      </div>
+      <div
+        className={Styles.content}
+        sx={{ gap: 1 }}
+      >
+        <div
+          className={Styles.tabs}
+          sx={{ gap: 0 }}
+        >
+          <button disabled={!mongoStatus.connected || tab === 'browser'} onClick={gotoBrowser}>
+            Browser
           </button>
-          <button disabled={tab === 'upload'} onClick={gotoUpload}>
-            U
+          <button disabled={!mongoStatus.connected || tab === 'upload'} onClick={gotoUpload}>
+            Upload
           </button>
+          <button disabled={!mongoStatus.connected || tab === 'notes'} onClick={gotoNotes}>
+            Notes
+          </button>
+        </div>
+        <div
+          className={Styles.tabContent}
+          sx={{ gap: 1 }}
+        >
+          { tab === 'browser' && <Browser
+            files={files}
+            onRename={handleRename}
+            onDelete={handleDelete}
+          /> }
+          { tab === 'upload' && <UploadForm
+            onUpload={handleUpload}
+          />}
+          { tab === 'notes' && <Notes />}
         </div>
       </div>
 
-      { tab === 'browser' && <Browser
-        files={files}
-        onRename={handleRename}
-        onDelete={handleDelete}
-      /> }
-      { tab === 'upload' && <UploadForm
-        disabled={!mongoStatus.connected}
-        onUpload={handleUpload}
-      />}
     </div>
   )
 }

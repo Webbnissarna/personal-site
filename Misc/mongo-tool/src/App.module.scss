@@ -8,4 +8,22 @@
     display: grid;
     grid-template: 1fr / 30% 10% 1fr 1fr auto;
   }
+
+  .content {
+    display: grid;
+    height: 100%;
+    grid-template: 1fr / 100px 1fr;
+    grid-template-areas: "tabs tabContent";
+
+    .tabs {
+      grid-area: tabs;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #FFF;
+    }
+
+    .tabContent {
+      grid-area: tabContent;
+    }
+  }
 }
