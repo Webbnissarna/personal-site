@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'Work Sans';
+  src: url('./WorkSans-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 300 700;
+}
+
+@font-face {
+  font-family: 'Work Sans';
+  src: url('./WorkSans-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 300 700;
+  font-style: italic;
+}
+
+body {
+  margin: 0;
+
+  background-color: #121212;
+  color: #EFEFEF;
+}
+
+* {
+  font-family: 'Work Sans', 'Arial';
+  font-variation-settings: 'wght' 300;
+}
+
+button {
+  cursor: pointer;
+}

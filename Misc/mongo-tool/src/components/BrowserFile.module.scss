@@ -1,0 +1,59 @@
+.cell {
+  cursor: pointer;
+  display: grid;
+  position: relative;
+
+
+  .check {
+    width: 10px;
+    height: 10px;
+    outline: 1px solid #FFF;
+
+    &.checked {
+      background-color: #FFF;
+    }
+
+    &.hidden {
+      opacity: 0;
+    }
+  }
+
+  &.grid {
+    width: 100px;
+    height: 100px;
+    grid-template: 30px auto / 1fr;
+    justify-items: center;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+
+    span {
+      word-break: break-all;
+      text-align-last: center;
+      align-self: center;
+    }
+
+    .check {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+    }
+  }
+
+  &.list {
+    grid-template: 1fr / 15px 15px repeat(5, 1fr);
+    justify-items: left;
+    align-items: center;
+
+    img {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}

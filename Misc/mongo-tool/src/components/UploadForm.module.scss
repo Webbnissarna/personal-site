@@ -1,0 +1,19 @@
+.formRoot {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+
+  .form {
+    width: 30%;
+    display: grid;
+    grid-template: repeat(auto-fill, 1fr) / 1fr;
+    justify-items: stretch;
+    text-align: center;
+
+    img {
+      object-fit: contain;
+      max-height: 150px;
+      width: 100%;
+    }
+  }
+}
