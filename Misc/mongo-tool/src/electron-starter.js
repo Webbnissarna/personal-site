@@ -101,6 +101,7 @@ ipcMain.on('mongo-files-rename', (event, arg) => {
 ipcMain.on('mongo-files-upload', (event, arg) => {
   const { files } = arg
   console.log(`mongo-files-upload ${files.length} files`)
+  console.log(files.map(f => `\t${f.filePath}`).join('\n'))
   const promises = []
   for (let i = 0; i < files.length; i++) {
     const { key, filePath, contentType } = files[i]
