@@ -61,7 +61,7 @@ export default function AddNoteForm ({ onUpload }) {
 
   const doUpload = () => onUpload({
     ...noteData,
-    tags: noteData._meta.tagsStr.split(',').map(t => t.trim().toLowerCase())
+    tags: noteData._meta.tagsStr.split(',').map(t => t.trim().toLowerCase()).filter(t => t)
   })
 
   return (
