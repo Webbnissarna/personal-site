@@ -3,9 +3,10 @@ exports.formatDateNumber = function (num) {
   const yyyy = date.getUTCFullYear().toString()
   const mm = (date.getUTCMonth() + 1).toString().padStart(2, '0')
   const dd = date.getUTCDate().toString().padStart(2, '0')
-  const H = date.getUTCHours().toString().padStart(2, '0')
+  /* const H = date.getUTCHours().toString().padStart(2, '0')
   const M = date.getUTCMinutes().toString().padStart(2, '0')
-  return `${yyyy}-${mm}-${dd} ${H}:${M} (UTC)`
+  return `${yyyy}-${mm}-${dd} ${H}:${M} (UTC)` */
+  return `${yyyy}-${mm}-${dd}`
 }
 
 exports.getStaticContentUrl = function (key) {
