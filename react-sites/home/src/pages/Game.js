@@ -6,6 +6,8 @@ import SharedStyles from '../Shared.module.scss'
 import ReactMarkdown from 'react-markdown'
 import Util from '../Util.js'
 import Tags from '../components/Tags'
+import path from 'path'
+import ScreenshotViewer from '../components/ScreenshotViewer'
 
 export default function Game () {
   const { id } = useParams()
@@ -48,6 +50,10 @@ export default function Game () {
                 <div>
                   <ReactMarkdown source={data.game.body} />
                 </div>
+                <ScreenshotViewer
+                  screenshotUrls={data.game.presentation.screenshots}
+                  thumbnailUrls={data.game.presentation.screenshots.map((ssId) => `${ssId.substr(0, ssId.lastIndexOf('.'))}-thumb${path.extname(ssId)}`)}
+                />
               </>)
           )
         }
