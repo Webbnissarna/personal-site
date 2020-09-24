@@ -27,6 +27,11 @@ $card-image-margin: 20px;
   }
 }
 
+.centeredFallback {
+  text-align: center;
+  opacity: 0.8;
+}
+
 .pageRoot {
   display: flex;
   flex-direction: column;

@@ -24,7 +24,7 @@ export default function Projects () {
         </div>
         <div className={SharedStyles.header}>
           <h1>Projects</h1>
-          <span>A list of various non-game projects (websites, apps etc.) I&apos;ve made or I&apos;m currently working on</span>
+          <span>A list of various non-game projects (websites, apps etc.) I&apos;ve made or I&apos;m working on</span>
         </div>
         <div className={SharedStyles.listContainer}>
           {
@@ -34,19 +34,22 @@ export default function Projects () {
                 : (<span>Unknown error fetching data</span>)
             ) : (
               loading ? (<span>Loading...</span>)
-                : (data.projects.map((project, index) => (
-                  <a key={`project_${index}`} href={`https://${project.subdomain}.${window.location.hostname}/`}>
-                    <div className={SharedStyles.listCard}>
-                      <div className={SharedStyles.img} style={{ backgroundImage: 'url(http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png)' }} />
-                      <div className={SharedStyles.content}>
-                        <div className={SharedStyles.innerContent}>
-                          <h2>{project.title}</h2>
-                          <p>{project.desc}</p>
+                : data.projects.length === 0 ? (
+                  <p className={SharedStyles.centeredFallback}>No projects currently published, please check back later 🙂</p>
+                ) : (
+                  data.projects.map((project, index) => (
+                    <a key={`project_${index}`} href={`https://${project.subdomain}.${window.location.hostname}/`}>
+                      <div className={SharedStyles.listCard}>
+                        <div className={SharedStyles.img} style={{ backgroundImage: 'url(http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png)' }} />
+                        <div className={SharedStyles.content}>
+                          <div className={SharedStyles.innerContent}>
+                            <h2>{project.title}</h2>
+                            <p>{project.desc}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </a>
-                )))
+                    </a>
+                  )))
             )
           }
         </div>

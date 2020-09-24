@@ -41,26 +41,29 @@ export default function Notes () {
                 : (<span>Unknown error fetching data</span>)
             ) : (
               loading ? (<span>Loading...</span>)
-                : (data.notes.filter(n => !n.hidden).map((note, index) => (
-                  <NavLink key={`note_${index}`} to={`/notes/${note._id}`}>
-                    <div className={SharedStyles.listCard}>
-                      { note.imageKey && <div className={SharedStyles.img} style={{ backgroundImage: `url(${Util.getStaticContentUrl(note.imageKey)})` }} /> }
-                      <div className={SharedStyles.content}>
-                        <div className={SharedStyles.metaRoot}>
-                          <Tags tags={note.tags} keyPrefix={`note_${index}`} />
-                          <div className={SharedStyles.spacer} />
-                          <span>{Util.formatDateNumber(note.uploadDate)}</span>
-                        </div>
-                        <div className={SharedStyles.innerContent}>
-                          <h2>{note.title}</h2>
-                          <div>
-                            <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
+                : data.notes.filter(n => !n.hidden).length === 0 ? (
+                  <p className={SharedStyles.centeredFallback}>No notes currently posted, please check back later 🙂</p>
+                ) : (
+                  data.notes.filter(n => !n.hidden).map((note, index) => (
+                    <NavLink key={`note_${index}`} to={`/notes/${note._id}`}>
+                      <div className={SharedStyles.listCard}>
+                        { note.imageKey && <div className={SharedStyles.img} style={{ backgroundImage: `url(${Util.getStaticContentUrl(note.imageKey)})` }} /> }
+                        <div className={SharedStyles.content}>
+                          <div className={SharedStyles.metaRoot}>
+                            <Tags tags={note.tags} keyPrefix={`note_${index}`} />
+                            <div className={SharedStyles.spacer} />
+                            <span>{Util.formatDateNumber(note.uploadDate)}</span>
+                          </div>
+                          <div className={SharedStyles.innerContent}>
+                            <h2>{note.title}</h2>
+                            <div>
+                              <ReactMarkdown source={note.desc} disallowedTypes={['paragraph']} unwrapDisallowed />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </NavLink>
-                )))
+                    </NavLink>
+                  )))
             )
           }
         </div>
