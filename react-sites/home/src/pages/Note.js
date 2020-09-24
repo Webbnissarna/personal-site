@@ -2,13 +2,12 @@ import React from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
-import ReactMarkdown from 'react-markdown/with-html'
 import Styles from './Note.module.scss'
 import SharedStyles from '../Shared.module.scss'
 import PropTypes from 'prop-types'
 import Util from '../Util'
 import Tags from '../components/Tags'
-import mdh from '../markdownHelper'
+import MarkdownRoot from '../components/MarkdownRoot'
 
 export default function Note ({ explicitID }) {
   const { id } = useParams()
@@ -47,13 +46,7 @@ export default function Note ({ explicitID }) {
                   <span className={SharedStyles.subtitle}>{Util.formatDateNumber(data.note.uploadDate)}</span>
                   <Tags tags={data.note.tags} />
                 </div>
-                <div>
-                  <ReactMarkdown
-                    escapeHtml={false}
-                    source={Util.replaceMDLinks(data.note.body)}
-                    renderers={mdh.renderers}
-                  />
-                </div>
+                <MarkdownRoot source={data.note.body} />
               </>)
           )
         }

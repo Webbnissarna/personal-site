@@ -3,11 +3,11 @@ import { NavLink, useParams } from 'react-router-dom'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import SharedStyles from '../Shared.module.scss'
-import ReactMarkdown from 'react-markdown'
 import Util from '../Util.js'
 import Tags from '../components/Tags'
 import path from 'path'
 import ScreenshotViewer from '../components/ScreenshotViewer'
+import MarkdownRoot from '../components/MarkdownRoot'
 
 export default function Game () {
   const { id } = useParams()
@@ -47,9 +47,7 @@ export default function Game () {
                   <span className={SharedStyles.subtitle}>{Util.formatDateNumber(data.game.release_date)}</span>
                   <Tags tags={data.game.tags} />
                 </div>
-                <div>
-                  <ReactMarkdown source={data.game.body} />
-                </div>
+                <MarkdownRoot source={data.game.body} />
                 <ScreenshotViewer
                   screenshotUrls={data.game.presentation.screenshots}
                   thumbnailUrls={data.game.presentation.screenshots.map((ssId) => `${ssId.substr(0, ssId.lastIndexOf('.'))}-thumb${path.extname(ssId)}`)}
