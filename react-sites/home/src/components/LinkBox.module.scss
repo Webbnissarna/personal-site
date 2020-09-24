@@ -1,0 +1,16 @@
+a.link {
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 0.9em;
+
+  &:hover {
+    filter: contrast(1.2);
+  }
+
+  &:active {
+    filter: contrast(1.7);
+  }
+}
