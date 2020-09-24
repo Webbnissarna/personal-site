@@ -1,9 +1,11 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const fs = require('fs')
 const fsp = fs.promises
 const mongoose = require('mongoose')
 const { createModel } = require('mongoose-gridfs')
 const path = require('path')
+
+let mainWindow
 
 let dbConFiles = null
 let dbConMain = null
@@ -184,7 +186,22 @@ ipcMain.on('mongo-note-upload', async (event, arg) => {
     })
 })
 
-let mainWindow
+ipcMain.on('mongo-note-download', (event, arg) => {
+  const note = arg
+  dialog.showSaveDialog(mainWindow, {
+    title: `Save note ${note.id}`,
+    filters: [
+      { name: 'Markdown', extensions: ['md'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
+  })
+    .then((filepath) => {
+      console.log(filepath)
+      return filepath.canceled ? Promise.resolve() : fsp.writeFile(filepath.filePath, note.body, { encoding: 'utf-8' })
+    })
+    .then(() => event.reply('mongo-note-download', {}))
+    .catch((e) => event.reply('mongo-note-download', { error: e }))
+})
 
 function createWindow () {
   mainWindow = new BrowserWindow({

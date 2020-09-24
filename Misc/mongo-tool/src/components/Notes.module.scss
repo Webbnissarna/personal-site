@@ -1,4 +1,15 @@
-.list {
+.notesRoot {
+  height: 100%;
   display: grid;
-  grid-template: repeat(auto-fit, 1fr) / 1fr;
+  grid-template: 1fr auto / 1fr;
+
+  .list {
+    display: grid;
+    grid-template: repeat(auto-fit, 20px) / 1fr;
+  }
+  
+  .actionArea {
+    display: grid;
+    grid-template: 1fr / auto 1fr;
+  }
 }

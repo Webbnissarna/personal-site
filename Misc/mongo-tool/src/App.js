@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { jsx } from 'theme-ui'
 import Styles from './App.module.scss'
 import InfoText from './components/InfoText'
@@ -18,7 +18,7 @@ function App () {
   const [mongoStatus, setMongoStatus] = useState({ connected: false })
   const [files, setFiles] = useState([])
   const [notes, setNotes] = useState([])
-  const [tab, setTab] = useState('addNote')
+  const [tab, setTab] = useState('notes')
 
   const callIpc = (func, data, loadingText, cb) => {
     setLoading(p => ({ ...p, visible: true, text: loadingText }))
@@ -100,6 +100,14 @@ function App () {
     })
   }
 
+  const handleNoteDownload = (note) => {
+    console.log(`Downloading ${note.id}`)
+    callIpc('mongo-note-download', note, 'Downloading', (res) => {
+      console.log(res)
+      setInfoText(p => ({ ...p, type: 'err', text: res.error || '' }))
+    })
+  }
+
   return (
     <div className={Styles.rootContainer}>
       <LoadingOverlay visible={loading.visible} text={loading.text} />
@@ -147,6 +155,7 @@ function App () {
           />}
           { tab === 'notes' && <Notes
             notes={notes}
+            onDownload={handleNoteDownload}
           />}
           { tab === 'addNote' && <AddNoteForm
             onUpload={handleNoteUpload}

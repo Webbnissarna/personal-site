@@ -7,9 +7,9 @@ import Styles from './NoteListEntry.module.scss'
 
 import imgHidden from '../images/visibility.svg'
 
-export default function NoteListEntry ({ id, title, hidden }) {
+export default function NoteListEntry ({ id, title, hidden, selected, onClick }) {
   return (
-    <div className={Styles.note}>
+    <div onClick={onClick} className={classnames(Styles.note, selected && Styles.selected)}>
       <img src={imgHidden} alt="" className={hidden && Styles.visible} />
       <span>{id}</span>
       <span>{title}</span>
@@ -20,5 +20,7 @@ export default function NoteListEntry ({ id, title, hidden }) {
 NoteListEntry.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  hidden: PropTypes.bool
+  hidden: PropTypes.bool,
+  selected: PropTypes.bool,
+  onClick: PropTypes.func
 }
