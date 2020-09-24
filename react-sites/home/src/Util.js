@@ -13,3 +13,6 @@ exports.getStaticContentUrl = function (key) {
 }
 
 exports.mod = (x, n) => ((x % n + n) % n)
+
+const mdLinkRegex = /\]\(\$api:([^)]+)\)/g
+exports.replaceMDLinks = (str) => str.replaceAll(mdLinkRegex, (_m, p1) => `](${exports.getStaticContentUrl(p1)})`)
