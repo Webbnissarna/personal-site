@@ -11,5 +11,8 @@
   "devDependencies": {
     "fs-extra": "^9.0.1",
     "gulp": "^4.0.2"
+  },
+  "dependencies": {
+    "clipboardy": "^2.3.0"
   }
 }
