@@ -1,0 +1,118 @@
+@import './../SassCommon.scss';
+
+.screenshotsArea {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(auto-fill, calc(min(100%, 320px)));
+  justify-content: center;
+  z-index: 1;
+
+  .screenshotThumb {
+    width: 100%;
+    background-color: #f00;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: "";
+      padding-bottom: 56.25%;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.fullViewer {
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    max-width: 90%;
+    max-height: 90%;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    button {
+      cursor: pointer;
+    }
+
+    .closeButton {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    .prevButton, .nextButton {
+      position: absolute;
+      height: 50px;
+      top: calc(50% - 25px);
+    }
+
+    .prevButton {
+      left: 5px;
+    }
+
+    .nextButton {
+      right: 5px;
+    }
+
+    .fullLink {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      height: 20px;
+      text-align: center;
+    }
+
+    .indicators {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      height: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 10px);
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+
+      .indicator {
+        height: 10px;
+        width: 10px;
+        background-color: #fff;
+        opacity: 0.5;
+
+        &.active {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+@media (#{$portrait-query}) {
+  .screenshotsArea {
+    grid-template-columns: repeat(auto-fill, calc(45% - 10px));
+  }
+}
