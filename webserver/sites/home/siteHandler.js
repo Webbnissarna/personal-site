@@ -26,6 +26,11 @@ exports.api = {
         desc: String,
         release_date: Date,
         tags: [String],
+        presentation: {
+          thumb: String,
+          screenshots: [String],
+          backdrop: String
+        },
         body: String
       }),
       db.registerSchemaAndGetModel(con, 'Project', {
@@ -36,10 +41,11 @@ exports.api = {
       }),
       db.registerSchemaAndGetModel(con, 'Note', {
         _id: String,
+        hidden: Boolean,
         title: String,
-        img_key: String,
         desc: String,
-        post_date: Date,
+        uploadDate: Date,
+        imageKey: String,
         tags: [String],
         body: String
       })

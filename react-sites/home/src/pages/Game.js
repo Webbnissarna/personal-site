@@ -16,6 +16,11 @@ export default function Game () {
         release_date
         tags
         body
+        presentation {
+          thumb
+          backdrop
+          screenshots
+        }
       }
     }
   `)
@@ -35,7 +40,7 @@ export default function Game () {
             loading ? (<span>Loading...</span>)
               : (<>
                 <div className={SharedStyles.header}>
-                  <img className={SharedStyles.headerImage} alt="" src={'http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png'} />
+                  <img className={SharedStyles.headerImage} alt="" src={Util.getStaticContentUrl(data.game.presentation.thumb)} />
                   <h1>{data.game.title}</h1>
                   <span className={SharedStyles.subtitle}>{Util.formatDateNumber(data.game.release_date)}</span>
                   <Tags tags={data.game.tags} />
@@ -49,18 +54,6 @@ export default function Game () {
       </div>
     </div>
   )
-
-  // <div>
-  //  { !!error && <span>Error: {`${error}`}</span> }
-  //  { loading ? (<span>Loading...</span>) : (
-  //    <div>
-  //      <b>Title: </b><span>{data.game.title}</span><br />
-  //      <b>Release Date: </b><span>{new Date(Number.parseInt(data.game.release_date)).toISOString()}</span><br />
-  //      <b>Body: </b><span>{data.game.body}</span>
-  //    </div>
-  //  )
-  //  }
-  // </div>
 }
 
 Game.propTypes = {

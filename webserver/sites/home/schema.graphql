@@ -14,7 +14,14 @@ type Game {
     desc: String
     release_date: String
     tags: [String]
+    presentation: GamePresentation
     body: String
+}
+
+type GamePresentation {
+    thumb: String
+    screenshots: [String]
+    backdrop: String
 }
 
 type Project {
@@ -26,10 +33,11 @@ type Project {
 
 type Note {
     _id: ID!
+    hidden: Boolean
     title: String
-    img_key: String
+    imageKey: String
     desc: String
-    post_date: String
+    uploadDate: String
     tags: [String]
     body: String
 }

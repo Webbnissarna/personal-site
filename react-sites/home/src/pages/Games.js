@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks'
 import Styles from './Games.module.scss'
 import SharedStyles from '../Shared.module.scss'
 import Tags from '../components/Tags'
+import Util from '../Util'
 
 export default function Games () {
   const { data, loading, error } = useQuery(gql`
@@ -16,6 +17,9 @@ export default function Games () {
         desc
         tags
         release_date
+        presentation {
+          thumb
+        }
       }
     }
   `)
@@ -40,7 +44,7 @@ export default function Games () {
               loading ? (<span>Loading...</span>)
                 : (data.games.map((game, index) => (
                   <NavLink key={`game_${index}`} to={`/games/${game._id}`}>
-                    <div className={Styles.listCard} style={{ backgroundImage: 'url(http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png)' }}>
+                    <div className={Styles.listCard} style={{ backgroundImage: `url(${Util.getStaticContentUrl(game.presentation.thumb)})` }}>
                       <div className={Styles.content}>
                         <h2>{game.title}</h2>
                         <Tags tags={game.tags} keyPrefix={`game_${index}`} />

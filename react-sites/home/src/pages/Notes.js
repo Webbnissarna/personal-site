@@ -14,9 +14,10 @@ export default function Notes () {
       notes {
         _id
         title
-        img_key
+        hidden
+        imageKey
         desc
-        post_date
+        uploadDate
         tags
       }
     }
@@ -40,15 +41,15 @@ export default function Notes () {
                 : (<span>Unknown error fetching data</span>)
             ) : (
               loading ? (<span>Loading...</span>)
-                : (data.notes.map((note, index) => (
+                : (data.notes.filter(n => !n.hidden).map((note, index) => (
                   <NavLink key={`note_${index}`} to={`/notes/${note._id}`}>
                     <div className={SharedStyles.listCard}>
-                      { note.img_key && <div className={SharedStyles.img} style={{ backgroundImage: `url(${Util.getStaticContentUrl(note.img_key)})` }} /> }
+                      { note.imageKey && <div className={SharedStyles.img} style={{ backgroundImage: `url(${Util.getStaticContentUrl(note.imageKey)})` }} /> }
                       <div className={SharedStyles.content}>
                         <div className={SharedStyles.metaRoot}>
                           <Tags tags={note.tags} keyPrefix={`note_${index}`} />
                           <div className={SharedStyles.spacer} />
-                          <span>{Util.formatDateNumber(note.post_date)}</span>
+                          <span>{Util.formatDateNumber(note.uploadDate)}</span>
                         </div>
                         <div className={SharedStyles.innerContent}>
                           <h2>{note.title}</h2>
