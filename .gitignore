@@ -128,3 +128,7 @@ mongo-tool/npm-debug.log.*
 mongo-tool/*.css.d.ts
 mongo-tool/*.sass.d.ts
 mongo-tool/*.scss.d.ts
+scripts/_dbtemp/files
+scripts/_dbtemp/main
+scripts/_dbtemp/backup/files
+scripts/_dbtemp/backup/main
