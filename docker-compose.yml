@@ -60,6 +60,8 @@ services:
     volumes:
       # enable persistent data storage
       - mongodata:/data/db
+    ports:
+      - "27017:27017"
   mongo-express:
     image: mongo-express
     environment:
