@@ -37,7 +37,9 @@ exports.api = {
         _id: String,
         title: String,
         desc: String,
-        subdomain: String
+        imageKey: String,
+        subdomain: String,
+        url: String
       }),
       db.registerSchemaAndGetModel(con, 'Note', {
         _id: String,
