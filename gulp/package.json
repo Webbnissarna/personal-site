@@ -1,0 +1,15 @@
+{
+  "name": "gulp",
+  "version": "1.0.0",
+  "description": "Gulp script for building my site",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Master Kenth",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1",
+    "gulp": "^4.0.2"
+  }
+}
