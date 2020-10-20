@@ -11,7 +11,9 @@ export default function Projects () {
       projects {
         title
         desc
+        imageKey
         subdomain
+        url
       }
     }
   `)
@@ -38,9 +40,8 @@ export default function Projects () {
                   <p className={SharedStyles.centeredFallback}>No projects currently published, please check back later 🙂</p>
                 ) : (
                   data.projects.map((project, index) => (
-                    <a key={`project_${index}`} href={`https://${project.subdomain}.${window.location.hostname}/`}>
+                    <a key={`project_${index}`} href={project.url || `https://${project.subdomain}.${window.location.hostname}/`}>
                       <div className={SharedStyles.listCard}>
-                        <div className={SharedStyles.img} style={{ backgroundImage: 'url(http://api.masterkenth-test.com/_files/main/games/sky_climb_thumb.png)' }} />
                         <div className={SharedStyles.content}>
                           <div className={SharedStyles.innerContent}>
                             <h2>{project.title}</h2>
